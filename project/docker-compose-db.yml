@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: bank_database
+    environment:
+      POSTGRES_DB: bank
+      POSTGRES_USER: bank_user
+      POSTGRES_PASSWORD: bank_password
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
