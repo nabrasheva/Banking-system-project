@@ -15,10 +15,10 @@ VALUES ('IBAN123456789', 1000.00, 1, 1),
        ('IBAN987654321', 500.50, 2, 2),
        ('IBAN987654325', 999.99, 3, 3);
 
-INSERT INTO public.safe (name, key, funds, account_id)
-VALUES ('Safe1', 'Key1', 100.00, 1),
-       ('Safe2', 'Key2', 50.50, 2),
-       ('SafeN', 'KeyN', 99.99, 3);
+INSERT INTO public.safe (name, key, initial_funds, account_id, creation_date)
+VALUES ('Safe1', 'Key1', 100.00, 1, '2023-12-01'),
+       ('Safe2', 'Key2', 50.50, 2, '2023-12-01'),
+       ('SafeN', 'KeyN', 99.99, 3, '2023-12-01');
 
 INSERT INTO public.transaction (sent_amount, issue_date, receiver_iban, reason, account_id)
 VALUES (50.00, '2023-01-01', 'ReceiverIBAN1', 'Payment for Service 1', 1),
