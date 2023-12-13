@@ -2,6 +2,7 @@ package com.banking.project.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class Transaction {
     @Column(name="sent_amount", nullable = false)
     private BigDecimal sentAmount;
 
+    @CreationTimestamp
     @Column(name="issue_date", nullable = false)
     private LocalDateTime issueDate;
 

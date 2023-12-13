@@ -2,6 +2,7 @@ package com.banking.project.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class Safe {
     @Column(name = "initial_funds", nullable = false)
     private BigDecimal initialFunds;
 
+    @CreationTimestamp
     @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
