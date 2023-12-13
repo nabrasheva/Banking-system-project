@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "safe")
@@ -23,7 +24,10 @@ public class Safe {
     @Column(name = "key", nullable = false)
     private String key;
 
-    @Column(name = "funds", nullable = false)
-    private BigDecimal funds;
+    @Column(name = "initial_funds", nullable = false)
+    private BigDecimal initialFunds;
+
+    @Column(name = "creation_date", nullable = false)
+    private LocalDate creationDate;
 
 }

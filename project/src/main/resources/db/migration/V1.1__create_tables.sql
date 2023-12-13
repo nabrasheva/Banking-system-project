@@ -27,8 +27,9 @@ CREATE TABLE IF NOT EXISTS public.safe (
                       id BIGSERIAL PRIMARY KEY,
                       name VARCHAR(255) NOT NULL,
                       key VARCHAR(255) NOT NULL,
-                      funds NUMERIC(19, 2) NOT NULL,
+                      initial_funds NUMERIC(19, 2) NOT NULL,
                       account_id BIGINT,
+                      creation_date DATE           NOT NULL,
                       FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
