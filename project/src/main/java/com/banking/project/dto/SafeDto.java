@@ -15,13 +15,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class SafeDto {
 
-    @NotBlank
+    @NotBlank(message = "{name.NotBlank}")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "{key.NotBlank}")
     private String key;
 
-    @NotNull
+    @NotNull(message = "{initialFunds.NotNull}")
     private BigDecimal initialFunds;
 
 }

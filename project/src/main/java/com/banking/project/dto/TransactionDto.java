@@ -2,6 +2,7 @@ package com.banking.project.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,15 +17,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TransactionDto {
 
-    @NotNull
+    @NotNull(message = "{sentAmount.NotNull}")
     private BigDecimal sentAmount;
 
-    @NotNull
+    @NotNull(message = "{issueDate.NotNull}")
     private LocalDateTime issueDate;
 
-    @NotBlank
+    @NotBlank(message = "{receiverIban.NotBlank}")
+    @Pattern(regexp = "[A-Z0-9]", message = "{receiverIban.Pattern}")
     private String receiverIban;
 
-    @NotBlank
+    @NotBlank(message = "{reason.NotBlank}")
     private String reason;
 }

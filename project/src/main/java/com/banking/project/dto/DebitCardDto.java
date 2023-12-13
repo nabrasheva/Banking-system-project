@@ -15,13 +15,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DebitCardDto {
 
-    @NotBlank
+    @NotBlank(message = "{number.NotBlank}")
     private String number;
 
-    @NotNull
+    @NotNull(message = "{expiryDate.NotNull}")
     private LocalDate expiryDate;
 
-    @NotNull
+    @NotNull(message = "{cvv.NotNull}")
     private Long cvv;
 
 }
