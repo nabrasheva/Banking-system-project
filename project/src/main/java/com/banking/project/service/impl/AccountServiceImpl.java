@@ -1,6 +1,8 @@
 package com.banking.project.service.impl;
 
+import com.banking.project.entity.Account;
 import com.banking.project.repository.AccountRepository;
+import com.banking.project.repository.specification.AccountSpecification;
 import com.banking.project.service.AccountService;
 import com.banking.project.service.DebitCardService;
 import com.banking.project.service.SafeService;
@@ -16,4 +18,16 @@ public class AccountServiceImpl implements AccountService {
     private final DebitCardService debitCardService;
     private final SafeService safeService;
     private final TransactionService transactionService;
+
+
+    @Override
+    public boolean doesIbanExist(final String iban) {
+        return accountRepository.exists(AccountSpecification.ibanLike(iban));
+    }
+
+    @Override
+    public Long saveAccount(final Account account) {
+        final Account accountSaved = accountRepository.save(account);
+        return accountSaved.getId();
+    }
 }

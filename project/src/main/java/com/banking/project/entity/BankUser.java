@@ -27,6 +27,6 @@ public class BankUser {
     @Column(name="country", nullable = false)
     private String country;
 
-    @OneToOne
-    private Account accounts;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Account account;
 }
