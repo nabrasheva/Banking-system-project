@@ -14,7 +14,7 @@ public interface SafeService {
 
     Long updateSafeByName(SafeDto safeDto, String name);
 
-    void deleteSafeByName(String name);
+    void deleteSafeByName(Long id);
 
     boolean doesNameExist(String name);
 

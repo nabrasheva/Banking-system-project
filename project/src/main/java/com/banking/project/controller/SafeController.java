@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -28,5 +29,12 @@ public class SafeController {
     public SafeDto getAllSafes(@RequestParam(required = false) final String name) {
         return safeService.getSafeByName(name);
     }
+
+    @DeleteMapping(value = "{id}")
+    @ResponseStatus(value = NO_CONTENT)
+    public void deleteSafe(@PathVariable final Long id) {
+        safeService.deleteSafeByName(id);
+    }
+
 
 }

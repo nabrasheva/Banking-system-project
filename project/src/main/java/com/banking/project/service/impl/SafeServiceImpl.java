@@ -41,8 +41,9 @@ public class SafeServiceImpl implements SafeService {
     }
 
     @Override
-    public void deleteSafeByName(final String name) {
-
+    public void deleteSafeByName(final Long id) {
+        final Safe safe = safeRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format("Safe with id %s doesn't exist in the db.", id)));
+        safeRepository.delete(safe);
     }
 
     @Override

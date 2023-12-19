@@ -18,7 +18,7 @@ public class AccountController {
 
     @PostMapping("/{id}/createSafe")
     @ResponseStatus(value = CREATED)
-    public Long createAccountSafe(@PathVariable final Long id, @RequestBody @Valid final SafeDto safeDto){
-        return accountService.createSafeForAccount(id, safeDto);
+    public String createAccountSafe(@PathVariable final Long id, @RequestBody @Valid final SafeDto safeDto) {
+        return "Your safe id is :  " + accountService.createSafeForAccount(id, safeDto);
     }
 }
