@@ -2,18 +2,18 @@ package com.banking.project.controller;
 
 import com.banking.project.dto.SafeDto;
 import com.banking.project.service.impl.SafeServiceImpl;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/safes")
+@Slf4j
 public class SafeController {
     private final SafeServiceImpl safeService;
 
@@ -29,9 +29,4 @@ public class SafeController {
         return safeService.getSafeByName(name);
     }
 
-    @PostMapping
-    @ResponseStatus(value = CREATED)
-    public Long createSafe(@RequestBody @Valid final SafeDto safeDto){
-        return safeService.createSafe(safeDto);
-    }
 }

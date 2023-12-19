@@ -3,6 +3,7 @@ package com.banking.project.service.impl;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.entity.Safe;
 import com.banking.project.repository.SafeRepository;
+import com.banking.project.repository.specification.SafeSpecification;
 import com.banking.project.service.SafeService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,8 +30,9 @@ public class SafeServiceImpl implements SafeService {
     }
 
     @Override
-    public Long createSafe(final SafeDto safeDto) {
-        return null;
+    public Long createSafe(final Safe safe) {
+        final Safe safeSaved = safeRepository.save(safe);
+        return safeSaved.getId();
     }
 
     @Override
@@ -41,5 +43,10 @@ public class SafeServiceImpl implements SafeService {
     @Override
     public void deleteSafeByName(final String name) {
 
+    }
+
+    @Override
+    public boolean doesNameExist(final String name) {
+        return safeRepository.exists(SafeSpecification.nameLike(name));
     }
 }
