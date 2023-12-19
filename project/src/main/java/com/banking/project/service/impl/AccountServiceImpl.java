@@ -41,7 +41,11 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalArgumentException("Safe with this name exists!");
         }
 
-        final Safe safe = Safe.builder().name(safeDto.getName()).key(safeDto.getKey()).initialFunds(safeDto.getInitialFunds()).build();
+        final Safe safe = Safe.builder()
+                .name(safeDto.getName())
+                .key(safeDto.getKey())
+                .initialFunds(safeDto.getInitialFunds())
+                .build();
 
         account.getSafes().add(safe);
 
