@@ -28,5 +28,5 @@ public class BankUser {
     private String country;
 
     @OneToOne
-    private Account accounts;
+    private Account account;
 }

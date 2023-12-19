@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS public.account (
                          iban VARCHAR(255) UNIQUE NOT NULL,
                          available_amount NUMERIC(19, 2) NOT NULL,
                          debit_card_id BIGINT,
-                         bank_user_id BIGINT,
                          FOREIGN KEY (debit_card_id) REFERENCES debit_card (id)
 );
 
