@@ -44,10 +44,8 @@ public class BankUserServiceImpl implements BankUserService {
         }
         final DebitCard debitCard = DebitCard.builder().cvv(CVVGenerator.generateCVV()).expiryDate(LocalDate.now().plusYears(3)).number(number).build();
 
-        debitCardService.saveDebitCard(debitCard);
         final Account account = Account.builder().availableAmount(BigDecimal.valueOf(0)).iban(iban).debitCard(debitCard).build();
 
-        accountService.saveAccount(account);
         final BankUser user = BankUser.builder().email(bankUserDto.getEmail())
                 .country(bankUserDto.getCountry())
                 .username(bankUserDto.getUsername())
