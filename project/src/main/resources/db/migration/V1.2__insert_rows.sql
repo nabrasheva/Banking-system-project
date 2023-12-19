@@ -1,8 +1,8 @@
-INSERT INTO public.bank_user (username, password, country)
-VALUES ('user1', 'password1', 'Country1'),
-       ('user2', 'password2', 'Country2'),
+INSERT INTO public.bank_user (email, username, password, country)
+VALUES ('email1', 'user1', 'password1', 'Country1'),
+       ('email2', 'user2', 'password2', 'Country2'),
        -- Add more rows as needed
-       ('userN', 'passwordN', 'CountryN');
+       ('email3', 'userN', 'passwordN', 'CountryN');
 
 INSERT INTO public.debit_card (number, expiry_date, cvv)
 VALUES ('1234567890123456', '2023-12-31', 123),

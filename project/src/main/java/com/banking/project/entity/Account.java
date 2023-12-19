@@ -32,8 +32,5 @@ public class Account {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bank_user_id")
-    private BankUser bankUser;
+    
 }

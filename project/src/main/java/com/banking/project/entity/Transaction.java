@@ -26,7 +26,7 @@ public class Transaction {
     @Column(name="issue_date", nullable = false)
     private LocalDateTime issueDate;
 
-    @Column(name="receiver_iban", nullable = false)
+    @Column(name = "receiver_iban")
     private String receiverIban;
 
     @Column(name="reason", nullable = false)

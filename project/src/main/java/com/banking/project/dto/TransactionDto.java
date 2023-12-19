@@ -23,7 +23,6 @@ public class TransactionDto {
     @NotNull(message = "{issueDate.NotNull}")
     private LocalDateTime issueDate;
 
-    @NotBlank(message = "{receiverIban.NotBlank}")
     @Pattern(regexp = "[A-Z0-9]", message = "{receiverIban.Pattern}")
     private String receiverIban;
 

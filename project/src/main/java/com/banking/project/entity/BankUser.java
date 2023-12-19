@@ -3,8 +3,6 @@ package com.banking.project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "bank_user")
 @Getter
@@ -17,6 +15,9 @@ public class BankUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name="username", nullable = false)
     private String username;
 
@@ -26,7 +27,6 @@ public class BankUser {
     @Column(name="country", nullable = false)
     private String country;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bank_user_id")
-    private List<Account> accounts;
+    @OneToOne
+    private Account accounts;
 }
