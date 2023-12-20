@@ -1,6 +1,35 @@
 package com.banking.project.constant;
 
 public class ExceptionMessages {
-    public static final String SAFE_NOT_FOUND_MESSAGE = "Safe with this name doesn't exist in the db!";
-    public static final String ACCOUNT_NOT_FOUND_MESSAGE = "Account with this id doesn't exist!";
+
+    /**
+     * Not found messages
+     */
+
+    public static final String SAFE_NOT_FOUND_MESSAGE = "Safe with this name was not found in the database!";
+    public static final String ACCOUNT_NOT_FOUND_MESSAGE = "Account with this id was not found in the database!";
+
+
+    /**
+     * Existing entity properties messages
+     */
+
+    public static final String SAFE_ALREADY_EXISTS_MESSAGE = "Safe with this name already exists in the database!";
+    public static final String USER_ALREADY_EXISTS_MESSAGE = "User with this email already exists in the database!";
+
+    /**
+     * Message for constructor in non-instantiable classes
+     */
+    public static final String NON_INSTANTIABLE_CLASS_MESSAGE = "Do not instantiate this class!";
+
+
+    /**
+     * Global exception messages
+     */
+
+    public static final String CAUGHT_EXCEPTION = "An exception has been caught";
+
+    private ExceptionMessages() throws IllegalAccessException {
+        throw new IllegalAccessException(NON_INSTANTIABLE_CLASS_MESSAGE);
+    }
 }

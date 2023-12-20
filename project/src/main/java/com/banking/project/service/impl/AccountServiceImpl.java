@@ -4,6 +4,7 @@ import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.Safe;
+import com.banking.project.exception.exists.SafeAlreadyExistsException;
 import com.banking.project.exception.notfound.AccountNotFoundException;
 import com.banking.project.exception.notfound.SafeNotFoundException;
 import com.banking.project.repository.AccountRepository;
@@ -21,8 +22,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static com.banking.project.constant.ExceptionMessages.ACCOUNT_NOT_FOUND_MESSAGE;
-import static com.banking.project.constant.ExceptionMessages.SAFE_NOT_FOUND_MESSAGE;
+import static com.banking.project.constant.ExceptionMessages.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
         final Account account = accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (safeService.doesNameExist(safeDto.getName())) {
-            throw new IllegalArgumentException("Safe with this name exists!");
+            throw new SafeAlreadyExistsException(SAFE_ALREADY_EXISTS_MESSAGE);
         }
 
         final Safe safe = Safe.builder()
