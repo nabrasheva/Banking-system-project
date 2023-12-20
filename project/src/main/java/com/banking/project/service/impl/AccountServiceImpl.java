@@ -1,5 +1,6 @@
 package com.banking.project.service.impl;
 
+import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.Safe;
@@ -10,6 +11,7 @@ import com.banking.project.service.DebitCardService;
 import com.banking.project.service.SafeService;
 import com.banking.project.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,6 +27,7 @@ public class AccountServiceImpl implements AccountService {
     private final DebitCardService debitCardService;
     private final SafeService safeService;
     private final TransactionService transactionService;
+    private final ModelMapper mapper;
 
 
     @Override
@@ -52,7 +55,14 @@ public class AccountServiceImpl implements AccountService {
                 .initialFunds(safeDto.getInitialFunds())
                 .build();
 
+        if (!(safeDto.getInitialFunds().compareTo(BigDecimal.ZERO) == 0) && !(safe.getInitialFunds().compareTo(account.getAvailableAmount()) < 0)) {
+            throw new RuntimeException("You don't have enough money!");
+        }
+
         account.getSafes().add(safe);
+        final BigDecimal reduceAvailableAmount = account.getAvailableAmount().subtract(safe.getInitialFunds());
+        account.setAvailableAmount(reduceAvailableAmount);
+
 
         accountRepository.save(account);
 
@@ -69,17 +79,31 @@ public class AccountServiceImpl implements AccountService {
                 .filter(safe -> safe.getName().equals(name))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException(String.format("Safe with name %s doesn't exist in the db.", name)));
-        
+
         final BigDecimal initialFunds = foundSafe.getInitialFunds();
         final LocalDate creationDate = foundSafe.getCreationDate();
         final BigDecimal yearsDifference = BigDecimal.valueOf(ChronoUnit.YEARS.between(creationDate, LocalDate.now()));
 
-        final BigDecimal newFunds = yearsDifference.multiply(initialFunds).multiply(BigDecimal.valueOf(0.5));
+
+        if (yearsDifference.equals(BigDecimal.ZERO)) {
+            account.setAvailableAmount(account.getAvailableAmount().add(initialFunds));
+        } else {
+            final BigDecimal newFunds = yearsDifference.multiply(initialFunds).multiply(BigDecimal.valueOf(0.5));
+            account.setAvailableAmount(account.getAvailableAmount().add(newFunds));
+        }
 
         safeList.remove(foundSafe);
-        account.setAvailableAmount(account.getAvailableAmount().add(newFunds));
 
         accountRepository.save(account);
+
+    }
+
+    @Override
+    public AccountDto getAccountById(final Long id) {
+        final Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.format("Account with id %d not found in database", id)));
+
+        return mapper.map(account, AccountDto.class);
 
     }
 }

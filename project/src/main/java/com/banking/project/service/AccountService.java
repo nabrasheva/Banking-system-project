@@ -1,5 +1,6 @@
 package com.banking.project.service;
 
+import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.entity.Account;
 
@@ -12,4 +13,6 @@ public interface AccountService {
     Long createSafeForAccount(Long accountId, SafeDto safeDto);
 
     void deleteSafeByNameAndIban(String name, String iban);
+
+    AccountDto getAccountById(Long id);
 }
