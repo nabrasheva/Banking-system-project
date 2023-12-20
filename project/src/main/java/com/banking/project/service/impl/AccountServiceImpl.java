@@ -12,6 +12,11 @@ import com.banking.project.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
@@ -52,5 +57,29 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
 
         return safe.getId();
+    }
+
+    @Override
+    public void deleteSafeByNameAndIban(final String name, final String iban) {
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new RuntimeException("Account with this id doesn't exist!"));
+
+        final List<Safe> safeList = account.getSafes();
+        final Safe foundSafe = safeList
+                .stream()
+                .filter(safe -> safe.getName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(String.format("Safe with name %s doesn't exist in the db.", name)));
+        
+        final BigDecimal initialFunds = foundSafe.getInitialFunds();
+        final LocalDate creationDate = foundSafe.getCreationDate();
+        final BigDecimal yearsDifference = BigDecimal.valueOf(ChronoUnit.YEARS.between(creationDate, LocalDate.now()));
+
+        final BigDecimal newFunds = yearsDifference.multiply(initialFunds).multiply(BigDecimal.valueOf(0.5));
+
+        safeList.remove(foundSafe);
+        account.setAvailableAmount(account.getAvailableAmount().add(newFunds));
+
+        accountRepository.save(account);
+
     }
 }

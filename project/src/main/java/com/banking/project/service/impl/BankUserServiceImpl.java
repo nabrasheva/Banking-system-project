@@ -56,4 +56,12 @@ public class BankUserServiceImpl implements BankUserService {
 
         return user.getId();
     }
+
+    @Override
+    public void deleteBankUser(final String email) {
+        final BankUser bankUser = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new RuntimeException("Bank user does not exist!"));
+        bankUserRepository.delete(bankUser);
+    }
+
+
 }

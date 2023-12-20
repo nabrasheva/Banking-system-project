@@ -4,4 +4,6 @@ import com.banking.project.dto.BankUserDto;
 
 public interface BankUserService {
     Long createBankUser(final BankUserDto bankUserDto);
+
+    void deleteBankUser(String email);
 }

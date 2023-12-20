@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -25,7 +28,7 @@ public class SafeServiceImpl implements SafeService {
 
     @Override
     public SafeDto getSafeByName(final String name) {
-        final Safe safe = safeRepository.findSafeByName(name).orElseThrow();
+        final Safe safe = safeRepository.findSafeByName(name).orElseThrow(() -> new RuntimeException(String.format("Safe with name %s doesn't exist in the db.", name)));
         return mapper.map(safe, SafeDto.class);
     }
 
@@ -41,9 +44,15 @@ public class SafeServiceImpl implements SafeService {
     }
 
     @Override
-    public void deleteSafeById(final Long id) {
-        safeRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format("Safe with id %s doesn't exist in the db.", id)));
-        safeRepository.deleteById(id);
+    public BigDecimal deleteSafe(final Safe safe) {
+        final BigDecimal initialFunds = safe.getInitialFunds();
+        final LocalDate creationDate = safe.getCreationDate();
+        final BigDecimal yearsDifference = BigDecimal.valueOf(ChronoUnit.YEARS.between(creationDate, LocalDate.now()));
+
+        final BigDecimal newFunds = yearsDifference.multiply(initialFunds).multiply(BigDecimal.valueOf(0.5));
+        safeRepository.delete(safe);
+
+        return newFunds;
     }
 
     @Override

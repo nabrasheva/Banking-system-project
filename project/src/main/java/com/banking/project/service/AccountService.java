@@ -10,4 +10,6 @@ public interface AccountService {
     Long saveAccount(Account account);
 
     Long createSafeForAccount(Long accountId, SafeDto safeDto);
+
+    void deleteSafeByNameAndIban(String name, String iban);
 }
