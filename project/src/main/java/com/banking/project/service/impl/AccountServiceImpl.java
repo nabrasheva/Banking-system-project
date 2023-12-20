@@ -4,6 +4,8 @@ import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.Safe;
+import com.banking.project.exception.notfound.AccountNotFoundException;
+import com.banking.project.exception.notfound.SafeNotFoundException;
 import com.banking.project.repository.AccountRepository;
 import com.banking.project.repository.specification.AccountSpecification;
 import com.banking.project.service.AccountService;
@@ -18,6 +20,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import static com.banking.project.constant.ExceptionMessages.ACCOUNT_NOT_FOUND_MESSAGE;
+import static com.banking.project.constant.ExceptionMessages.SAFE_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Long createSafeForAccount(final Long accountId, final SafeDto safeDto) {
-        final Account account = accountRepository.findById(accountId).orElseThrow(() -> new RuntimeException("Account with this id doesn't exist!"));
+        final Account account = accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (safeService.doesNameExist(safeDto.getName())) {
             throw new IllegalArgumentException("Safe with this name exists!");
@@ -71,14 +76,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteSafeByNameAndIban(final String name, final String iban) {
-        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new RuntimeException("Account with this id doesn't exist!"));
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         final List<Safe> safeList = account.getSafes();
         final Safe foundSafe = safeList
                 .stream()
                 .filter(safe -> safe.getName().equals(name))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(String.format("Safe with name %s doesn't exist in the db.", name)));
+                .orElseThrow(() -> new SafeNotFoundException(SAFE_NOT_FOUND_MESSAGE));
 
         final BigDecimal initialFunds = foundSafe.getInitialFunds();
         final LocalDate creationDate = foundSafe.getCreationDate();
@@ -101,7 +106,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto getAccountById(final Long id) {
         final Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("Account with id %d not found in database", id)));
+                .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         return mapper.map(account, AccountDto.class);
 
