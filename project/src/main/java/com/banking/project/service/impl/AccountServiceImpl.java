@@ -7,6 +7,7 @@ import com.banking.project.entity.Safe;
 import com.banking.project.exception.exists.SafeAlreadyExistsException;
 import com.banking.project.exception.notfound.AccountNotFoundException;
 import com.banking.project.exception.notfound.SafeNotFoundException;
+import com.banking.project.exception.validation.NotEnoughFundsException;
 import com.banking.project.repository.AccountRepository;
 import com.banking.project.repository.specification.AccountSpecification;
 import com.banking.project.service.AccountService;
@@ -61,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
                 .build();
 
         if (!(safeDto.getInitialFunds().compareTo(BigDecimal.ZERO) == 0) && !(safe.getInitialFunds().compareTo(account.getAvailableAmount()) < 0)) {
-            throw new RuntimeException("You don't have enough money!");
+            throw new NotEnoughFundsException(NOT_ENOUGH_FUNDS_MESSAGE);
         }
 
         account.getSafes().add(safe);
