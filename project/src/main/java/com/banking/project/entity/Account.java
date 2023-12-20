@@ -28,9 +28,11 @@ public class Account {
     private DebitCard debitCard;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "account_id")
     private List<Safe> safes;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "account_id")
     private List<Transaction> transactions;
     
 }
