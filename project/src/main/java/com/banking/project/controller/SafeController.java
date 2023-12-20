@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/safes")
+@RequestMapping("/safe")
 @Slf4j
 public class SafeController {
     private final SafeServiceImpl safeService;

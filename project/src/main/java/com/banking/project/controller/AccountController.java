@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class AccountController {
     private final AccountServiceImpl accountService;
 
-    @PostMapping("/{id}/createSafe")
+    @PostMapping("/{id}/safe")
     @ResponseStatus(value = CREATED)
     public String createAccountSafe(@PathVariable final Long id, @RequestBody @Valid final SafeDto safeDto) {
         return "Your safe id is :  " + accountService.createSafeForAccount(id, safeDto);
