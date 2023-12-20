@@ -33,7 +33,7 @@ public class SafeController {
     @DeleteMapping(value = "{id}")
     @ResponseStatus(value = NO_CONTENT)
     public void deleteSafe(@PathVariable final Long id) {
-        safeService.deleteSafeById(id);
+        //safeService.deleteSafeById(id);
     }
 
 

@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS public.transaction (
                              issue_date TIMESTAMP NOT NULL,
                              receiver_iban VARCHAR(255),
                              reason VARCHAR(255) NOT NULL,
+                             credit_payment BOOLEAN,
                              account_id BIGINT,
                              FOREIGN KEY (account_id) REFERENCES account(id)
 );

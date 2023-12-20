@@ -32,4 +32,7 @@ public class Transaction {
     @Column(name="reason", nullable = false)
     private String reason;
 
+    @Column(name = "credit_payment", nullable = false)
+    private Boolean creditPayment;
+
 }
