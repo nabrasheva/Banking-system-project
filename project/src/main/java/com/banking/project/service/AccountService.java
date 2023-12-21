@@ -14,5 +14,5 @@ public interface AccountService {
 
     void deleteSafeByNameAndIban(String name, String iban);
 
-    AccountDto getAccountById(Long id);
+    AccountDto getAccountByIban(String iban);
 }

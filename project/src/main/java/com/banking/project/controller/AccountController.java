@@ -23,10 +23,10 @@ public class AccountController {
         return "Your safe id is :  " + accountService.createSafeForAccount(id, safeDto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(params = "iban")
     @ResponseStatus(value = OK)
-    public AccountDto getById(@PathVariable final Long id) {
-        return accountService.getAccountById(id);
+    public AccountDto getById(@RequestParam final String iban) {
+        return accountService.getAccountByIban(iban);
     }
 
     @DeleteMapping("/{iban}/{name}")

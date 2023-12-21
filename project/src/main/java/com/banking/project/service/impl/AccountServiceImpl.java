@@ -105,8 +105,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDto getAccountById(final Long id) {
-        final Account account = accountRepository.findById(id)
+    public AccountDto getAccountByIban(final String iban) {
+        final Account account = accountRepository.findAccountByIban(iban)
                 .orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         return mapper.map(account, AccountDto.class);
