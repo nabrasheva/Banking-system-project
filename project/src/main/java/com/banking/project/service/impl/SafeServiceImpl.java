@@ -2,6 +2,7 @@ package com.banking.project.service.impl;
 
 import com.banking.project.dto.SafeDto;
 import com.banking.project.entity.Safe;
+import com.banking.project.exception.notfound.SafeNotFoundException;
 import com.banking.project.repository.SafeRepository;
 import com.banking.project.repository.specification.SafeSpecification;
 import com.banking.project.service.SafeService;
@@ -13,6 +14,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import static com.banking.project.constant.ExceptionMessages.SAFE_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +31,7 @@ public class SafeServiceImpl implements SafeService {
 
     @Override
     public SafeDto getSafeByName(final String name) {
-        final Safe safe = safeRepository.findSafeByName(name).orElseThrow(() -> new RuntimeException(String.format("Safe with name %s doesn't exist in the db.", name)));
+        final Safe safe = safeRepository.findSafeByName(name).orElseThrow(() -> new SafeNotFoundException(SAFE_NOT_FOUND_MESSAGE));
         return mapper.map(safe, SafeDto.class);
     }
 
