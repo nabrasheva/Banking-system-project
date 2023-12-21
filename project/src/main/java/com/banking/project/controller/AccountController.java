@@ -28,7 +28,7 @@ public class AccountController {
 
     @GetMapping(params = "iban")
     @ResponseStatus(value = OK)
-    public AccountDto getById(@RequestParam final String iban) {
+    public AccountDto getByIban(@RequestParam final String iban) {
         return accountService.getAccountByIban(iban);
     }
 
