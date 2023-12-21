@@ -11,6 +11,7 @@ import com.banking.project.exception.notfound.AccountNotFoundException;
 import com.banking.project.exception.notfound.SafeNotFoundException;
 import com.banking.project.exception.notfound.TransactionNotFoundException;
 import com.banking.project.exception.validation.NotEnoughFundsException;
+import com.banking.project.exception.validation.WrongCreditAmountInputException;
 import com.banking.project.repository.AccountRepository;
 import com.banking.project.repository.specification.AccountSpecification;
 import com.banking.project.service.AccountService;
@@ -147,11 +148,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void sendMoney(final String senderIban, final String receiverIban, final BigDecimal amount, final String reason) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Amount should be bigger than 0");
+            throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
-        final Account accountSender = accountRepository.findAccountByIban(senderIban).orElseThrow(() -> new RuntimeException("Account with this iban doesn't exist!"));
+        final Account accountSender = accountRepository.findAccountByIban(senderIban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
         if (accountSender.getAvailableAmount().compareTo(amount) < 0) {
-            throw new RuntimeException("There is not enough money in the account!");
+            throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
         final Optional<Account> accountReceiverOptional = accountRepository.findAccountByIban(receiverIban);
@@ -173,9 +174,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void takeLoan(final String iban, final BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Amount should be bigger than 0");
+            throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
-        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new RuntimeException("Account with this iban doesn't exist!"));
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         account.setCreditAmount(account.getCreditAmount().add(amount));
         account.setAvailableAmount(account.getAvailableAmount().add(amount));
@@ -190,22 +191,22 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void returnLoan(final String iban, final BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Amount should be bigger than 0");
+            throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
-        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new RuntimeException("Account with this iban doesn't exist!"));
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
         final BigDecimal creditAmount = account.getCreditAmount();
 
         if (creditAmount == null || creditAmount.equals(BigDecimal.ZERO)) {
-            throw new RuntimeException("There is no credit that should be returned!");
+            throw new WrongCreditAmountInputException(WRONG_CREDIT_AMOUNT_INPUT_MESSAGE);
         }
 
         if (creditAmount.compareTo(amount) < 0) {
-            throw new RuntimeException("The credit that should be returned is less than the requested amount!");
+            throw new WrongCreditAmountInputException(WRONG_CREDIT_AMOUNT_INPUT_MESSAGE);
 
         }
         if (account.getAvailableAmount().compareTo(amount) < 0) {
-            throw new RuntimeException("There is not enough money in the account!");
+            throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
         account.setAvailableAmount(account.getAvailableAmount().subtract(amount));

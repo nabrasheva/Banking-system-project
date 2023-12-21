@@ -9,6 +9,7 @@ import com.banking.project.exception.notfound.SafeNotFoundException;
 import com.banking.project.exception.notfound.TransactionNotFoundException;
 import com.banking.project.exception.validation.InvalidInputException;
 import com.banking.project.exception.validation.NotEnoughFundsException;
+import com.banking.project.exception.validation.WrongCreditAmountInputException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,7 +42,7 @@ public class GlobalExceptionHandler {
         return formatErrorsResponse(exception.getMessage());
     }
 
-    @ExceptionHandler({NotEnoughFundsException.class})
+    @ExceptionHandler({NotEnoughFundsException.class, WrongCreditAmountInputException.class})
     @ResponseStatus(value = BAD_REQUEST)
     public Map<String, List<String>> handleInvalidInputException(final InvalidInputException exception) {
         log.error(CAUGHT_EXCEPTION, exception);

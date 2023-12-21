@@ -32,6 +32,8 @@ public class ExceptionMessages {
 
 
     public static final String NOT_ENOUGH_FUNDS_MESSAGE = "Unable to create safe: Not enough funds!";
+    public static final String NON_ENOUGH_AMOUNT_MESSAGE = "Unable to create transaction: Not enough amount!";
+    public static final String WRONG_CREDIT_AMOUNT_INPUT_MESSAGE = "Unable to return credit: Wrong credit amount!";
 
 
     /**
