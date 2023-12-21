@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.account (
                          id BIGSERIAL PRIMARY KEY,
                          iban VARCHAR(255) UNIQUE NOT NULL,
                          available_amount NUMERIC(19, 2) NOT NULL,
+                         credit_amount NUMERIC(19, 2),
                          debit_card_id BIGINT,
                          FOREIGN KEY (debit_card_id) REFERENCES debit_card (id)
 );

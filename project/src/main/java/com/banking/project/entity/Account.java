@@ -24,6 +24,9 @@ public class Account {
     @Column(name = "available_amount",nullable = false)
     private BigDecimal availableAmount;
 
+    @Column(name = "credit_amount")
+    private BigDecimal creditAmount;
+
     @OneToOne(cascade = CascadeType.ALL)
     private DebitCard debitCard;
 
