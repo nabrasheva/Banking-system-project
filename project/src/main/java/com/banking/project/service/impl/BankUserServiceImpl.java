@@ -4,6 +4,7 @@ import com.banking.project.dto.BankUserDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.BankUser;
 import com.banking.project.entity.DebitCard;
+import com.banking.project.exception.exists.UserAlreadyExistsException;
 import com.banking.project.repository.BankUserRepository;
 import com.banking.project.repository.specification.BankUserSpecification;
 import com.banking.project.service.AccountService;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static com.banking.project.constant.ExceptionMessages.USER_ALREADY_EXISTS_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class BankUserServiceImpl implements BankUserService {
@@ -32,7 +35,7 @@ public class BankUserServiceImpl implements BankUserService {
     @Override
     public Long createBankUser(final BankUserDto bankUserDto) {
         if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
-            throw new IllegalArgumentException("Bank user already exists");
+            throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
         }
         String iban = IbanGenerator.generateIban(bankUserDto.getCountry());
         while (accountService.doesIbanExist(iban)) {
