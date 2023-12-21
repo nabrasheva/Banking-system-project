@@ -2,11 +2,14 @@ package com.banking.project.controller;
 
 import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.SafeDto;
+import com.banking.project.dto.TransactionDto;
 import com.banking.project.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -34,4 +37,17 @@ public class AccountController {
     public void deleteAccountSafe(@PathVariable final String iban, @PathVariable final String name) {
         accountService.deleteSafeByNameAndIban(name, iban);
     }
+
+    @GetMapping("/{iban}/transaction")
+    @ResponseStatus(value = OK)
+    public List<TransactionDto> getAccountTransactions(@PathVariable final String iban) {
+        return accountService.getAccountTransactions(iban);
+    }
+
+    @GetMapping("/{iban}/safe")
+    @ResponseStatus(value = OK)
+    public List<SafeDto> getAccountSafes(@PathVariable final String iban) {
+        return accountService.getAccountSafes(iban);
+    }
+
 }
