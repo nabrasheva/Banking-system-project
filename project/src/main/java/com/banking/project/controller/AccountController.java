@@ -20,10 +20,10 @@ import static org.springframework.http.HttpStatus.*;
 public class AccountController {
     private final AccountService accountService;
 
-    @PostMapping("/{id}/safe")
+    @PostMapping("/{iban}/safe")
     @ResponseStatus(value = CREATED)
-    public String createAccountSafe(@PathVariable final Long id, @RequestBody @Valid final SafeDto safeDto) {
-        return "Your safe id is :  " + accountService.createSafeForAccount(id, safeDto);
+    public String createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
+        return "Your safe id is :  " + accountService.createSafeForAccount(iban, safeDto);
     }
 
     @GetMapping(params = "iban")

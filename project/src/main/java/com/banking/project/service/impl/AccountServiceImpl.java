@@ -53,8 +53,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long createSafeForAccount(final Long accountId, final SafeDto safeDto) {
-        final Account account = accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+    public Long createSafeForAccount(final String iban, final SafeDto safeDto) {
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (safeService.doesNameExist(safeDto.getName())) {
             throw new SafeAlreadyExistsException(SAFE_ALREADY_EXISTS_MESSAGE);

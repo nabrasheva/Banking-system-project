@@ -6,7 +6,6 @@ import com.banking.project.dto.TransactionDto;
 import com.banking.project.entity.Account;
 
 import java.math.BigDecimal;
-
 import java.util.List;
 
 public interface AccountService {
@@ -15,7 +14,7 @@ public interface AccountService {
 
     Long saveAccount(Account account);
 
-    Long createSafeForAccount(Long accountId, SafeDto safeDto);
+    Long createSafeForAccount(String iban, SafeDto safeDto);
 
     void deleteSafeByNameAndIban(String name, String iban);
 
