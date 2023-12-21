@@ -6,6 +6,7 @@ import com.banking.project.exception.exists.UserAlreadyExistsException;
 import com.banking.project.exception.notfound.AccountNotFoundException;
 import com.banking.project.exception.notfound.InputNotFoundException;
 import com.banking.project.exception.notfound.SafeNotFoundException;
+import com.banking.project.exception.notfound.TransactionNotFoundException;
 import com.banking.project.exception.validation.InvalidInputException;
 import com.banking.project.exception.validation.NotEnoughFundsException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({SafeNotFoundException.class, AccountNotFoundException.class})
+    @ExceptionHandler({SafeNotFoundException.class, AccountNotFoundException.class, TransactionNotFoundException.class})
     @ResponseStatus(value = NOT_FOUND)
     public Map<String, List<String>> handleInputNotFoundException(final InputNotFoundException exception) {
         log.error(CAUGHT_EXCEPTION, exception);

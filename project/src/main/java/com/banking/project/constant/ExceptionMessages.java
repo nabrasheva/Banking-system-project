@@ -6,8 +6,9 @@ public class ExceptionMessages {
      * Not found messages
      */
 
-    public static final String SAFE_NOT_FOUND_MESSAGE = "Safe with this name was not found in the database!";
+    public static final String SAFE_NOT_FOUND_MESSAGE = "Safe was not found in the database!";
     public static final String ACCOUNT_NOT_FOUND_MESSAGE = "Account with this iban was not found in the database!";
+    public static final String TRANSACTION_NOT_FOUND_MESSAGE = "Transaction was not found in the database";
 
 
     /**

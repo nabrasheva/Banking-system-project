@@ -2,11 +2,14 @@ package com.banking.project.service.impl;
 
 import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.SafeDto;
+import com.banking.project.dto.TransactionDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.Safe;
+import com.banking.project.entity.Transaction;
 import com.banking.project.exception.exists.SafeAlreadyExistsException;
 import com.banking.project.exception.notfound.AccountNotFoundException;
 import com.banking.project.exception.notfound.SafeNotFoundException;
+import com.banking.project.exception.notfound.TransactionNotFoundException;
 import com.banking.project.exception.validation.NotEnoughFundsException;
 import com.banking.project.repository.AccountRepository;
 import com.banking.project.repository.specification.AccountSpecification;
@@ -111,5 +114,31 @@ public class AccountServiceImpl implements AccountService {
 
         return mapper.map(account, AccountDto.class);
 
+    }
+
+    @Override
+    public List<TransactionDto> getAccountTransactions(final String iban) {
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+        final List<Transaction> transactions = account.getTransactions();
+
+        if (transactions.isEmpty()) {
+            throw new TransactionNotFoundException(TRANSACTION_NOT_FOUND_MESSAGE);
+        }
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<SafeDto> getAccountSafes(final String iban) {
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+        final List<Safe> safes = account.getSafes();
+
+        if (safes.isEmpty()) {
+            throw new SafeNotFoundException(SAFE_NOT_FOUND_MESSAGE);
+        }
+        return safes.stream()
+                .map(safe -> mapper.map(safe, SafeDto.class))
+                .toList();
     }
 }
