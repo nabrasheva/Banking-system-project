@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
                 .initialFunds(safeDto.getInitialFunds())
                 .build();
 
-        if (!(safeDto.getInitialFunds().compareTo(BigDecimal.ZERO) == 0) && !(safe.getInitialFunds().compareTo(account.getAvailableAmount()) < 0)) {
+        if ((safeDto.getInitialFunds().compareTo(BigDecimal.ZERO) == 0) || (safe.getInitialFunds().compareTo(account.getAvailableAmount()) > 0)) {
             throw new NotEnoughFundsException(NOT_ENOUGH_FUNDS_MESSAGE);
         }
 
