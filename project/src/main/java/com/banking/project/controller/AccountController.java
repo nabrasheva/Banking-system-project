@@ -1,6 +1,7 @@
 package com.banking.project.controller;
 
 import com.banking.project.dto.AccountDto;
+import com.banking.project.dto.LoanDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.dto.TransactionDto;
 import com.banking.project.service.AccountService;
@@ -49,5 +50,24 @@ public class AccountController {
     public List<SafeDto> getAccountSafes(@PathVariable final String iban) {
         return accountService.getAccountSafes(iban);
     }
+
+    @PostMapping("/{iban}/transaction")
+    @ResponseStatus(value = CREATED)
+    public void sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
+        accountService.sendMoney(iban, transactionDto);
+    }
+
+    @PostMapping("/take-loan")
+    @ResponseStatus(value = CREATED)
+    public void takeLoan(@RequestBody final LoanDto loanDto) {
+        accountService.takeLoan(loanDto);
+    }
+
+    @PostMapping("/return-loan")
+    @ResponseStatus(value = CREATED)
+    public void returnLoan(@RequestBody final LoanDto loanDto) {
+        accountService.returnLoan(loanDto);
+    }
+
 
 }

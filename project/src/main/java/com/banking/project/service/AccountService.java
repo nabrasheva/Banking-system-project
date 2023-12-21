@@ -1,11 +1,11 @@
 package com.banking.project.service;
 
 import com.banking.project.dto.AccountDto;
+import com.banking.project.dto.LoanDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.dto.TransactionDto;
 import com.banking.project.entity.Account;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface AccountService {
@@ -18,11 +18,11 @@ public interface AccountService {
 
     void deleteSafeByNameAndIban(String name, String iban);
 
-    void sendMoney(String senderIban, String receiverIban, BigDecimal amount, String reason);
+    void sendMoney(String senderIban, TransactionDto transactionDto);
 
-    void takeLoan(String iban, BigDecimal amount);
+    void takeLoan(LoanDto loanDto);
 
-    void returnLoan(String iban, BigDecimal amount);
+    void returnLoan(LoanDto loanDto);
 
     AccountDto getAccountByIban(String iban);
 

@@ -1,6 +1,7 @@
 package com.banking.project.service.impl;
 
 import com.banking.project.dto.AccountDto;
+import com.banking.project.dto.LoanDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.dto.TransactionDto;
 import com.banking.project.entity.Account;
@@ -146,7 +147,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void sendMoney(final String senderIban, final String receiverIban, final BigDecimal amount, final String reason) {
+    public void sendMoney(final String senderIban, final TransactionDto transactionDto) {
+        final BigDecimal amount = transactionDto.getSentAmount();
+        final String receiverIban = transactionDto.getReceiverIban();
+
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
@@ -164,7 +168,7 @@ public class AccountServiceImpl implements AccountService {
 
         accountSender.getAvailableAmount().subtract(amount);
 
-        final Transaction transaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(reason).issueDate(LocalDateTime.now()).build();
+        final Transaction transaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
         accountSender.getTransactions().add(transaction);
 
         accountRepository.save(accountSender);
@@ -172,11 +176,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void takeLoan(final String iban, final BigDecimal amount) {
+    public void takeLoan(final LoanDto loanDto) {
+        final BigDecimal amount = loanDto.getCreditAmount();
+
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
-        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+        final Account account = accountRepository.findAccountByIban(loanDto.getUserIban()).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         account.setCreditAmount(account.getCreditAmount().add(amount));
         account.setAvailableAmount(account.getAvailableAmount().add(amount));
@@ -189,12 +195,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void returnLoan(final String iban, final BigDecimal amount) {
+    public void returnLoan(final LoanDto loanDto) {
+        final BigDecimal amount = loanDto.getCreditAmount();
+
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
-        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+        final Account account = accountRepository.findAccountByIban(loanDto.getUserIban()).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
         final BigDecimal creditAmount = account.getCreditAmount();
 
         if (creditAmount == null || creditAmount.equals(BigDecimal.ZERO)) {
