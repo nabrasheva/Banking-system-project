@@ -6,7 +6,6 @@ import com.banking.project.dto.TransactionDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.Safe;
 import com.banking.project.entity.Transaction;
-import com.banking.project.entity.Transaction;
 import com.banking.project.exception.exists.SafeAlreadyExistsException;
 import com.banking.project.exception.notfound.AccountNotFoundException;
 import com.banking.project.exception.notfound.SafeNotFoundException;
