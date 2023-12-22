@@ -62,4 +62,9 @@ public class SafeServiceImpl implements SafeService {
     public boolean doesNameExist(final String name) {
         return safeRepository.exists(SafeSpecification.nameLike(name));
     }
+
+    @Override
+    public void saveSafe(final Safe safe) {
+        safeRepository.save(safe);
+    }
 }

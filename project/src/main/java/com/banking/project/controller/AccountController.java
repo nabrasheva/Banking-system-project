@@ -1,6 +1,7 @@
 package com.banking.project.controller;
 
 import com.banking.project.dto.AccountDto;
+import com.banking.project.dto.DebitCardDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.dto.TransactionDto;
 import com.banking.project.service.AccountService;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -50,4 +52,15 @@ public class AccountController {
         return accountService.getAccountSafes(iban);
     }
 
+    @GetMapping("/{iban}/card")
+    @ResponseStatus(value = OK)
+    public DebitCardDto getAccountDebiCard(@PathVariable final String iban) {
+        return accountService.getDebitCardByIban(iban);
+    }
+
+    @PatchMapping(value = "/{iban}/safe", params = {"name", "funds"})
+    @ResponseStatus(value = CREATED)
+    public void updateAccountSafe(@PathVariable final String iban, @RequestParam final String name, @RequestParam final BigDecimal funds) {
+        accountService.updateSafe(iban, name, funds);
+    }
 }
