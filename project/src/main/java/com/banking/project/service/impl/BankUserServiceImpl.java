@@ -5,6 +5,7 @@ import com.banking.project.entity.Account;
 import com.banking.project.entity.BankUser;
 import com.banking.project.entity.DebitCard;
 import com.banking.project.exception.exists.UserAlreadyExistsException;
+import com.banking.project.exception.notfound.UserNotFoundException;
 import com.banking.project.repository.BankUserRepository;
 import com.banking.project.repository.specification.BankUserSpecification;
 import com.banking.project.service.AccountService;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static com.banking.project.constant.ExceptionMessages.USER_ALREADY_EXISTS_MESSAGE;
+import static com.banking.project.constant.ExceptionMessages.USER_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -62,8 +64,14 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public void deleteBankUser(final String email) {
-        final BankUser bankUser = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new RuntimeException("Bank user does not exist!"));
+        final BankUser bankUser = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
         bankUserRepository.delete(bankUser);
+    }
+
+    @Override
+    public BankUserDto getUserByEmail(final String email) {
+        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return modelMapper.map(user, BankUserDto.class);
     }
 
 
