@@ -2,6 +2,7 @@ package com.banking.project.service.impl;
 
 import com.banking.project.dto.AccountDto;
 import com.banking.project.dto.LoanDto;
+import com.banking.project.dto.DebitCardDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.dto.TransactionDto;
 import com.banking.project.entity.Account;
@@ -146,6 +147,7 @@ public class AccountServiceImpl implements AccountService {
                 .toList();
     }
 
+
     @Override
     public void sendMoney(final String senderIban, final TransactionDto transactionDto) {
         final BigDecimal amount = transactionDto.getSentAmount();
@@ -223,5 +225,35 @@ public class AccountServiceImpl implements AccountService {
         account.getTransactions().add(transaction);
 
         accountRepository.save(account);
+    }
+
+    @Override
+    public DebitCardDto getDebitCardByIban(final String iban) {
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+
+        return mapper.map(account.getDebitCard(), DebitCardDto.class);
+
+    }
+
+    @Override
+    public void updateSafe(final String iban, final String name, final BigDecimal funds) {
+        if (funds.compareTo(BigDecimal.ZERO) < 0 || funds.compareTo(BigDecimal.ZERO) == 0) {
+            throw new NotEnoughFundsException("New funds should be greater than zero!");
+        }
+        final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
+
+
+        final Optional<Safe> safeOptional = account.getSafes().stream().filter(foundSafe -> foundSafe.getName().equals(name)).findFirst();
+
+        if (safeOptional.isEmpty()) {
+            throw new SafeNotFoundException(SAFE_NOT_FOUND_MESSAGE);
+        }
+
+        final Safe safe = safeOptional.get();
+
+        safe.setInitialFunds(safe.getInitialFunds().add(funds));
+
+        safeService.saveSafe(safe);
+
     }
 }

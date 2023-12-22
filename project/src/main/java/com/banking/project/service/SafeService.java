@@ -19,4 +19,6 @@ public interface SafeService {
 
     boolean doesNameExist(String name);
 
+    void saveSafe(Safe safe);
+
 }
