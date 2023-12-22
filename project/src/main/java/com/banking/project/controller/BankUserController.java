@@ -3,6 +3,8 @@ package com.banking.project.controller;
 import com.banking.project.dto.BankUserDto;
 import com.banking.project.dto.UpdateBankUserDto;
 import com.banking.project.service.BankUserService;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ public class BankUserController {
 
     @PostMapping()
     @ResponseStatus(value = CREATED)
-    public Long createUser(@Valid @RequestBody final BankUserDto bankUserDto) {
+    public Long createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         return bankUserService.createBankUser(bankUserDto);
     }
 
