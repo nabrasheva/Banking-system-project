@@ -1,6 +1,7 @@
 package com.banking.project.service.impl;
 
 import com.banking.project.dto.BankUserDto;
+import com.banking.project.dto.UpdateBankUserDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.BankUser;
 import com.banking.project.entity.DebitCard;
@@ -72,6 +73,16 @@ public class BankUserServiceImpl implements BankUserService {
     public BankUserDto getUserByEmail(final String email) {
         final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
         return modelMapper.map(user, BankUserDto.class);
+    }
+
+    @Override
+    public void updateUsernameAndPassword(final String email, final UpdateBankUserDto bankUser) {
+        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+
+        user.setUsername(bankUser.getUsername());
+        user.setPassword(bankUser.getPassword());
+
+        bankUserRepository.save(user);
     }
 
 

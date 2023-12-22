@@ -1,6 +1,7 @@
 package com.banking.project.controller;
 
 import com.banking.project.dto.BankUserDto;
+import com.banking.project.dto.UpdateBankUserDto;
 import com.banking.project.service.BankUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class BankUserController {
         return bankUserService.createBankUser(bankUserDto);
     }
 
-    
+
     @GetMapping(params = "email")
     @ResponseStatus(value = OK)
     public BankUserDto getUserByEmail(@RequestParam final String email) {
@@ -33,5 +34,11 @@ public class BankUserController {
     @ResponseStatus(value = NO_CONTENT)
     public void deleteUser(@PathVariable final String email) {
         bankUserService.deleteBankUser(email);
+    }
+
+    @PatchMapping(value = "/{email}")
+    @ResponseStatus(value = NO_CONTENT)
+    public void updateUser(@PathVariable final String email, @RequestBody final UpdateBankUserDto bankUser) {
+        bankUserService.updateUsernameAndPassword(email, bankUser);
     }
 }
