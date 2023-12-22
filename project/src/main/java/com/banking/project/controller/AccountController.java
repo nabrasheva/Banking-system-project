@@ -1,6 +1,7 @@
 package com.banking.project.controller;
 
 import com.banking.project.dto.AccountDto;
+import com.banking.project.dto.LoanDto;
 import com.banking.project.dto.DebitCardDto;
 import com.banking.project.dto.SafeDto;
 import com.banking.project.dto.TransactionDto;
@@ -22,10 +23,10 @@ import static org.springframework.http.HttpStatus.*;
 public class AccountController {
     private final AccountService accountService;
 
-    @PostMapping("/{id}/safe")
+    @PostMapping("/{iban}/safe")
     @ResponseStatus(value = CREATED)
-    public String createAccountSafe(@PathVariable final Long id, @RequestBody @Valid final SafeDto safeDto) {
-        return "Your safe id is :  " + accountService.createSafeForAccount(id, safeDto);
+    public String createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
+        return "Your safe id is :  " + accountService.createSafeForAccount(iban, safeDto);
     }
 
     @GetMapping(params = "iban")
@@ -63,4 +64,23 @@ public class AccountController {
     public void updateAccountSafe(@PathVariable final String iban, @RequestParam final String name, @RequestParam final BigDecimal funds) {
         accountService.updateSafe(iban, name, funds);
     }
+    @PostMapping("/{iban}/transaction")
+    @ResponseStatus(value = CREATED)
+    public void sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
+        accountService.sendMoney(iban, transactionDto);
+    }
+
+    @PostMapping("/take-loan")
+    @ResponseStatus(value = CREATED)
+    public void takeLoan(@RequestBody final LoanDto loanDto) {
+        accountService.takeLoan(loanDto);
+    }
+
+    @PostMapping("/return-loan")
+    @ResponseStatus(value = CREATED)
+    public void returnLoan(@RequestBody final LoanDto loanDto) {
+        accountService.returnLoan(loanDto);
+    }
+
+
 }
