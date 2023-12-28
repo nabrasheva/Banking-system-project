@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.bank_user
     email      VARCHAR(255) UNIQUE NOT NULL,
     password   VARCHAR(255)        NOT NULL,
     country    VARCHAR(255)        NOT NULL,
+    role VARCHAR(255) NOT NULL,
     account_id BIGINT,
     FOREIGN KEY (account_id) REFERENCES account (id)
 );

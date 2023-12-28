@@ -27,6 +27,10 @@ public class BankUser {
     @Column(name="country", nullable = false)
     private String country;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Account account;
 }
