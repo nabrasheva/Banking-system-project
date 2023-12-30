@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Set;
 
 import static com.banking.project.constant.ExceptionMessages.USER_NOT_FOUND_MESSAGE;
 
@@ -24,8 +24,9 @@ public class JwtUserDetailsService implements UserDetailsService {
                 bankUserRepository.findBankUserByEmail(username)
                 .orElseThrow(()-> new UsernameNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
+        final Set<SimpleGrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority(user.getRole().name()));
 
-        return new User(user.getEmail(),user.getPassword(), Collections.singleton(authority));
+
+        return new User(user.getEmail(), user.getPassword(), authorities);
     }
 }

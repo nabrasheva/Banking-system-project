@@ -1,12 +1,16 @@
 package com.banking.project.service.impl;
 
 import com.banking.project.dto.BankUserDto;
+import com.banking.project.dto.LoginRequest;
+import com.banking.project.dto.LoginResponse;
 import com.banking.project.dto.UpdateBankUserDto;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.BankUser;
 import com.banking.project.entity.DebitCard;
+import com.banking.project.entity.UserRole;
 import com.banking.project.exception.exists.UserAlreadyExistsException;
 import com.banking.project.exception.notfound.UserNotFoundException;
+import com.banking.project.jwt.JwtService;
 import com.banking.project.repository.BankUserRepository;
 import com.banking.project.repository.specification.BankUserSpecification;
 import com.banking.project.service.AccountService;
@@ -20,6 +24,11 @@ import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -37,10 +46,12 @@ public class BankUserServiceImpl implements BankUserService {
     private final ModelMapper modelMapper;
     private final DebitCardService debitCardService;
     private final EmailSenderService emailSenderService;
-    // private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @Override
-    public Long createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+    public LoginResponse createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
         }
@@ -59,14 +70,16 @@ public class BankUserServiceImpl implements BankUserService {
         final BankUser user = BankUser.builder().email(bankUserDto.getEmail())
                 .country(bankUserDto.getCountry())
                 .username(bankUserDto.getUsername())
-                .password(bankUserDto.getPassword())
+                .password(passwordEncoder.encode(bankUserDto.getPassword()))
                 .account(account)
+                .role(UserRole.USER)
                 .build();
+
         bankUserRepository.save(user);
         emailSenderService.sendRegistrationConfirmationEmail(user);
 
 
-        return user.getId();
+        return login(new LoginRequest(user.getEmail(), user.getPassword()));
     }
 
     @Override
@@ -89,6 +102,28 @@ public class BankUserServiceImpl implements BankUserService {
         user.setPassword(bankUser.getPassword());
 
         bankUserRepository.save(user);
+    }
+
+    @Override
+    public LoginResponse login(final LoginRequest loginRequest) {
+        try {
+            final UserDetails userDetails = (UserDetails) authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            ).getPrincipal();
+
+            final String jwtToken = jwtService.generateToken(userDetails);
+
+            return LoginResponse.builder()
+                    .email(loginRequest.getEmail())
+                    .token(jwtToken)
+                    .build();
+        } catch (final BadCredentialsException e) {
+            throw new BadCredentialsException("Bad credentials");
+        }
+
     }
 
 
