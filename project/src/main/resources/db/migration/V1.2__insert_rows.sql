@@ -8,10 +8,10 @@ VALUES ('IBAN123456789', 1000.00, 100, 1),
        ('IBAN987654321', 500.50, null, 2),
        ('IBAN987654325', 999.99, 500, 3);
 
-INSERT INTO public.bank_user (email, username, password, country, account_id)
-VALUES ('email1', 'user1', 'password1', 'Country1', 1),
-       ('email2', 'user2', 'password2', 'Country2', 2),
-       ('email3', 'userN', 'passwordN', 'CountryN', 3);
+INSERT INTO public.bank_user (email, username, password, country, role, account_id)
+VALUES ('email1@gmail.com', 'user1', 'password1', 'Country1', 'USER', 1),
+       ('email2@gmail.com', 'user2', 'password2', 'Country2', 'ADMIN', 2),
+       ('email3@gmail.com', 'userN', 'passwordN', 'CountryN', 'USER', 3);
 
 INSERT INTO public.safe (name, key, initial_funds, account_id, creation_date)
 VALUES ('Safe1', 'Key1', 100.00, 1, '2023-12-01'),

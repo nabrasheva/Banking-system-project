@@ -1,6 +1,8 @@
 package com.banking.project.controller;
 
 import com.banking.project.dto.BankUserDto;
+import com.banking.project.dto.LoginRequest;
+import com.banking.project.dto.LoginResponse;
 import com.banking.project.dto.UpdateBankUserDto;
 import com.banking.project.service.BankUserService;
 import com.mailjet.client.errors.MailjetException;
@@ -19,10 +21,17 @@ import static org.springframework.http.HttpStatus.*;
 public class BankUserController {
     private final BankUserService bankUserService;
 
-    @PostMapping()
+    @PostMapping("auth/registration")
     @ResponseStatus(value = CREATED)
-    public Long createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
-        return bankUserService.createBankUser(bankUserDto);
+    public String createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+        bankUserService.createBankUser(bankUserDto);
+        return "User created successfully";
+    }
+
+    @PostMapping("auth/login")
+    @ResponseStatus(value = OK)
+    public LoginResponse login(@RequestBody @Valid final LoginRequest loginRequest) {
+        return bankUserService.login(loginRequest);
     }
 
 
