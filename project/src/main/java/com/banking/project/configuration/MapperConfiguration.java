@@ -1,5 +1,6 @@
 package com.banking.project.configuration;
 
+import com.banking.project.configuration.converters.BankUserToDtoConverter;
 import com.banking.project.configuration.converters.TransactionDtoToEntityConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ public class MapperConfiguration {
     public ModelMapper modelMapper() {
         final ModelMapper mapper = new ModelMapper();
         mapper.addConverter(new TransactionDtoToEntityConverter());
+        mapper.addConverter(new BankUserToDtoConverter());
         return mapper;
     }
 }

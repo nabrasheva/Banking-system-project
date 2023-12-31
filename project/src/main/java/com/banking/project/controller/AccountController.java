@@ -1,24 +1,86 @@
 package com.banking.project.controller;
 
+import com.banking.project.dto.AccountDto;
+import com.banking.project.dto.LoanDto;
+import com.banking.project.dto.DebitCardDto;
 import com.banking.project.dto.SafeDto;
-import com.banking.project.service.impl.AccountServiceImpl;
+import com.banking.project.dto.TransactionDto;
+import com.banking.project.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/account")
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
 
-    @PostMapping("/{id}/safe")
+    @PostMapping("/{iban}/safe")
     @ResponseStatus(value = CREATED)
-    public String createAccountSafe(@PathVariable final Long id, @RequestBody @Valid final SafeDto safeDto) {
-        return "Your safe id is :  " + accountService.createSafeForAccount(id, safeDto);
+    public String createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
+        return "Your safe id is :  " + accountService.createSafeForAccount(iban, safeDto);
     }
+
+    @GetMapping(params = "iban")
+    @ResponseStatus(value = OK)
+    public AccountDto getByIban(@RequestParam final String iban) {
+        return accountService.getAccountByIban(iban);
+    }
+
+    @DeleteMapping("/{iban}/{name}")
+    @ResponseStatus(value = NO_CONTENT)
+    public void deleteAccountSafe(@PathVariable final String iban, @PathVariable final String name) {
+        accountService.deleteSafeByNameAndIban(name, iban);
+    }
+
+    @GetMapping("/{iban}/transaction")
+    @ResponseStatus(value = OK)
+    public List<TransactionDto> getAccountTransactions(@PathVariable final String iban) {
+        return accountService.getAccountTransactions(iban);
+    }
+
+    @GetMapping("/{iban}/safe")
+    @ResponseStatus(value = OK)
+    public List<SafeDto> getAccountSafes(@PathVariable final String iban) {
+        return accountService.getAccountSafes(iban);
+    }
+
+    @GetMapping("/{iban}/card")
+    @ResponseStatus(value = OK)
+    public DebitCardDto getAccountDebiCard(@PathVariable final String iban) {
+        return accountService.getDebitCardByIban(iban);
+    }
+
+    @PatchMapping(value = "/{iban}/safe", params = {"name", "funds"})
+    @ResponseStatus(value = CREATED)
+    public void updateAccountSafe(@PathVariable final String iban, @RequestParam final String name, @RequestParam final BigDecimal funds) {
+        accountService.updateSafe(iban, name, funds);
+    }
+    @PostMapping("/{iban}/transaction")
+    @ResponseStatus(value = CREATED)
+    public void sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
+        accountService.sendMoney(iban, transactionDto);
+    }
+
+    @PostMapping("/take-loan")
+    @ResponseStatus(value = CREATED)
+    public void takeLoan(@RequestBody final LoanDto loanDto) {
+        accountService.takeLoan(loanDto);
+    }
+
+    @PostMapping("/return-loan")
+    @ResponseStatus(value = CREATED)
+    public void returnLoan(@RequestBody final LoanDto loanDto) {
+        accountService.returnLoan(loanDto);
+    }
+
+
 }

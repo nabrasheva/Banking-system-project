@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.account (
                          id BIGSERIAL PRIMARY KEY,
                          iban VARCHAR(255) UNIQUE NOT NULL,
                          available_amount NUMERIC(19, 2) NOT NULL,
+                         credit_amount NUMERIC(19, 2),
                          debit_card_id BIGINT,
                          FOREIGN KEY (debit_card_id) REFERENCES debit_card (id)
 );
@@ -20,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.bank_user
     email      VARCHAR(255) UNIQUE NOT NULL,
     password   VARCHAR(255)        NOT NULL,
     country    VARCHAR(255)        NOT NULL,
+    role VARCHAR(255) NOT NULL,
     account_id BIGINT,
     FOREIGN KEY (account_id) REFERENCES account (id)
 );
@@ -40,6 +42,7 @@ CREATE TABLE IF NOT EXISTS public.transaction (
                              issue_date TIMESTAMP NOT NULL,
                              receiver_iban VARCHAR(255),
                              reason VARCHAR(255) NOT NULL,
+                             credit_payment BOOLEAN,
                              account_id BIGINT,
                              FOREIGN KEY (account_id) REFERENCES account(id)
 );
