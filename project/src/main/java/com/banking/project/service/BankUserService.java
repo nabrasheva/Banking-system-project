@@ -8,7 +8,7 @@ import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 
 public interface BankUserService {
-    LoginResponse createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException;
+    void createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException;
 
     void deleteBankUser(String email);
 

@@ -51,7 +51,7 @@ public class BankUserServiceImpl implements BankUserService {
     private final JwtService jwtService;
 
     @Override
-    public LoginResponse createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+    public void createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
         }
@@ -79,7 +79,6 @@ public class BankUserServiceImpl implements BankUserService {
         emailSenderService.sendRegistrationConfirmationEmail(user);
 
 
-        return login(new LoginRequest(user.getEmail(), user.getPassword()));
     }
 
     @Override
