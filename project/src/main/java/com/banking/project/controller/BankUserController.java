@@ -21,7 +21,7 @@ public class BankUserController {
     @PostMapping("/registration")
     @ResponseStatus(value = CREATED)
     public String createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
-        bankUserService.createBankUser(bankUserDto);
+        bankUserService.registration(bankUserDto);
         return "User created successfully";
     }
 
@@ -52,7 +52,13 @@ public class BankUserController {
 
     @GetMapping(value = "/account",params = "email")
     @ResponseStatus(value = OK)
-    public AccountDto accountDto(@RequestParam String email){
+    public AccountDto accountDto(@RequestParam final String email) {
         return bankUserService.getAccountByEmail(email);
+    }
+
+    @PostMapping
+    @ResponseStatus(value = CREATED)
+    public void createAdmin(@RequestBody @Valid final BankUserDto bankUserDto) {
+        bankUserService.createAdmin(bankUserDto);
     }
 }

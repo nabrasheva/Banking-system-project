@@ -9,8 +9,8 @@ public class SecurityAuthList {
     public static final String LOGOUT_URL = "/logout";
 
     public static final String[] ADMIN_LIST = {
-            "/user\\?email=",
-            "/user/account\\?email=",
+            "/user",
+            "/user/account",
             "/account/{iban}/**"
     };
 

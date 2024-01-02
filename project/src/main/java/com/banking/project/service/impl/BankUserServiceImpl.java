@@ -48,7 +48,7 @@ public class BankUserServiceImpl implements BankUserService {
     private final JwtService jwtService;
 
     @Override
-    public void createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+    public void registration(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
         }
@@ -123,9 +123,23 @@ public class BankUserServiceImpl implements BankUserService {
     }
 
     @Override
-    public AccountDto getAccountByEmail(String email) {
-        BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(()-> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+    public AccountDto getAccountByEmail(final String email) {
+        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(()-> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
         return modelMapper.map(user.getAccount(),AccountDto.class);
+    }
+
+    @Override
+    public void createAdmin(final BankUserDto bankUserDto) {
+        final BankUser user = BankUser.builder()
+                .email(bankUserDto.getEmail())
+                .country(bankUserDto.getCountry())
+                .username(bankUserDto.getUsername())
+                .password(passwordEncoder.encode(bankUserDto.getPassword()))
+                .role(UserRole.ADMIN)
+                .account(null)
+                .build();
+
+        bankUserRepository.save(user);
     }
 
 
