@@ -1,9 +1,6 @@
 package com.banking.project.service.impl;
 
-import com.banking.project.dto.BankUserDto;
-import com.banking.project.dto.LoginRequest;
-import com.banking.project.dto.LoginResponse;
-import com.banking.project.dto.UpdateBankUserDto;
+import com.banking.project.dto.*;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.BankUser;
 import com.banking.project.entity.DebitCard;
@@ -123,6 +120,12 @@ public class BankUserServiceImpl implements BankUserService {
             throw new BadCredentialsException("Bad credentials");
         }
 
+    }
+
+    @Override
+    public AccountDto getAccountByEmail(String email) {
+        BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(()-> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return modelMapper.map(user.getAccount(),AccountDto.class);
     }
 
 
