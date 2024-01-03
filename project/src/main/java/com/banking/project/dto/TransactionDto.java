@@ -20,7 +20,7 @@ public class TransactionDto {
     @NotNull(message = "{sentAmount.NotNull}")
     private BigDecimal sentAmount;
 
-    @Pattern(regexp = "[A-Z0-9]", message = "{receiverIban.Pattern}")
+    @Pattern(regexp = "^[A-Z0-9]+$", message = "{receiverIban.Pattern}")
     private String receiverIban;
 
     @NotBlank(message = "{reason.NotBlank}")

@@ -62,7 +62,7 @@ public class BankUserServiceImpl implements BankUserService {
         }
         final DebitCard debitCard = DebitCard.builder().cvv(CVVGenerator.generateCVV()).expiryDate(LocalDate.now().plusYears(3)).number(number).build();
 
-        final Account account = Account.builder().availableAmount(BigDecimal.valueOf(0)).iban(iban).debitCard(debitCard).build();
+        final Account account = Account.builder().availableAmount(BigDecimal.valueOf(0)).iban(iban).debitCard(debitCard).creditAmount(BigDecimal.valueOf(0)).build();
 
         final BankUser user = BankUser.builder().email(bankUserDto.getEmail())
                 .country(bankUserDto.getCountry())
@@ -95,7 +95,7 @@ public class BankUserServiceImpl implements BankUserService {
         final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         user.setUsername(bankUser.getUsername());
-        user.setPassword(bankUser.getPassword());
+        user.setPassword(passwordEncoder.encode(bankUser.getPassword()));
 
         bankUserRepository.save(user);
     }

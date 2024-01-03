@@ -56,7 +56,7 @@ public class BankUserController {
         return bankUserService.getAccountByEmail(email);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create-admin")
     @ResponseStatus(value = CREATED)
     public void createAdmin(@RequestBody @Valid final BankUserDto bankUserDto) {
         bankUserService.createAdmin(bankUserDto);

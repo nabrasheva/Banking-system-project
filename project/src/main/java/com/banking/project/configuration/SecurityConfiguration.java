@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, ADMIN_LIST).hasAnyAuthority("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, ADMIN_LIST).hasAnyAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/user/create-admin").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/user/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(USER_LIST).hasAnyAuthority("USER")
                         .anyRequest().authenticated())
