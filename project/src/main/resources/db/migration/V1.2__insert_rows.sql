@@ -5,7 +5,7 @@ VALUES ('1234567890123456', '2023-12-31', 123),
 
 INSERT INTO public.account (iban, available_amount, credit_amount, debit_card_id)
 VALUES ('IBAN123456789', 1000.00, 100, 1),
-       ('IBAN987654321', 500.50, null, 2),
+       ('IBAN987654321', 500.50, 0.00, 2),
        ('IBAN987654325', 999.99, 500, 3);
 
 INSERT INTO public.bank_user (email, username, password, country, role, account_id)
