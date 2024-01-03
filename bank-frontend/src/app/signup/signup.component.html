@@ -1,1 +1,54 @@
-<p>signup works!</p>
+<mat-card-header><h1>Online Banking System</h1></mat-card-header>
+<div id="login-form" class="signup-main">
+  <mat-card>
+    <mat-card-header><h2>Signup form</h2></mat-card-header>
+    <form [formGroup]="signupForm" (ngSubmit)="signup()">
+      <div>
+        <mat-form-field>
+          <mat-label>Username:</mat-label>
+          <input matInput name="username" type="text" required formControlName="username">
+          <mat-error *ngIf="this.signupForm.get('username')?.hasError('required')">Username must be valid</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Email:</mat-label>
+          <input matInput name="email" type="email" required formControlName="email">
+          <mat-error *ngIf="this.signupForm.get('email')?.hasError('email')">Email must be valid</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Password:</mat-label>
+          <input matInput name="password" type="password" required formControlName="password">
+          <mat-error *ngIf="this.signupForm.get('password')?.hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="this.signupForm.get('password')?.hasError('pattern')">Password must meet the requirements</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Confirm Password:</mat-label>
+          <input matInput name="confirmPassword" type="password" required formControlName="confirmPassword">
+          <mat-error *ngIf="this.signupForm.get('confirmPassword')?.hasError('required')">Confirm Password is required</mat-error>
+          <mat-error *ngIf="passwordMismatch">Passwords do not match</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Select Country:</mat-label>
+          <mat-select  formControlName="country">
+            <mat-option value="BG">Bulgaria</mat-option>
+            <mat-option value="ES">Spain</mat-option>
+            <mat-option value="GB">Great Britain</mat-option>
+            <mat-option value="FR">France</mat-option>
+            <mat-option value="AU">Austria</mat-option>
+            <mat-option value="PL">Poland</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <button type="submit" mat-raised-button color="primary" [disabled]="!signupForm.valid">Sign up</button>
+      </div>
+      <br>
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+      <app-info-page *ngIf="isInfoMessage" [infoMessage]="infoMessage" (closeModal)="closeModal()"></app-info-page>
+
+    </form>
+    <br>
+    <p>Already have an account? <a [routerLink]="['../login']">Login</a></p>
+  </mat-card>
+</div>

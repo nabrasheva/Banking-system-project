@@ -17,7 +17,7 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatListModule} from "@angular/material/list";
 import {MatGridListModule} from "@angular/material/grid-list";
-import {MatCardModule} from "@angular/material/card";
+import {MatCardHeader, MatCardModule} from "@angular/material/card";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatExpansionModule} from "@angular/material/expansion";
@@ -72,7 +72,7 @@ import {MatNativeDateModule} from "@angular/material/core";
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatNativeDateModule,
+    MatNativeDateModule
   ],
   exports: [
     MatButtonModule,
@@ -96,6 +96,8 @@ import {MatNativeDateModule} from "@angular/material/core";
     MatIconModule,
     MatDialogModule,
     MatNativeDateModule,
+    MatCardHeader,
+    MatCardModule
   ]
 })
 export class MaterialUiModule { }

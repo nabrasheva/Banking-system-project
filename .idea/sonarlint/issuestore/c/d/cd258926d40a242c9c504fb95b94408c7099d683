@@ -1,0 +1,5 @@
+
+Æ
+java:S1130"êRemove the declaration of thrown exception 'com.mailjet.client.errors.MailjetSocketTimeoutException', as it cannot be thrown from method's body.(¶∫–ô8ΩÏÄœÃ1
+°
+java:S1130"ÉRemove the declaration of thrown exception 'com.mailjet.client.errors.MailjetException', as it cannot be thrown from method's body.(¶∫–ô8ΩÏÄœÃ1
