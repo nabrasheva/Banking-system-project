@@ -130,6 +130,9 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public void createAdmin(final BankUserDto bankUserDto) {
+        if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
+            throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
+        }
         final BankUser user = BankUser.builder()
                 .email(bankUserDto.getEmail())
                 .country(bankUserDto.getCountry())
