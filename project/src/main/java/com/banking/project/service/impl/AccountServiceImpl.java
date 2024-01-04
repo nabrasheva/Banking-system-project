@@ -221,7 +221,7 @@ public class AccountServiceImpl implements AccountService {
 
         account.setAvailableAmount(account.getAvailableAmount().subtract(amount));
         account.setCreditAmount(account.getCreditAmount().subtract(amount));
-        final Transaction transaction = Transaction.builder().sentAmount(amount.negate()).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
+        final Transaction transaction = Transaction.builder().sentAmount(amount.negate()).reason("Returning a loan").issueDate(LocalDateTime.now()).creditPayment(true).build();
         account.getTransactions().add(transaction);
 
         accountRepository.save(account);

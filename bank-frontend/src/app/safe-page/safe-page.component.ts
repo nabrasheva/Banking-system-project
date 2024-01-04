@@ -8,6 +8,7 @@ import {AccountService} from "../services/account.service";
 import {EnterSafeKeyComponent} from "../enter-safe-key/enter-safe-key.component";
 import {ShowSafeComponent} from "../show-safe/show-safe.component";
 import {CreateSafeComponent} from "../create-safe/create-safe.component";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-safe-page',
@@ -20,7 +21,7 @@ export class SafePageComponent {
   dataSource: MatTableDataSource<SafeRow> = new MatTableDataSource();
   iban!:string;
 
-  constructor(private dialog: MatDialog,private route: ActivatedRoute, private router: Router, private accountService:AccountService) {
+  constructor(private dialog: MatDialog,private route: ActivatedRoute, private router: Router, private accountService:AccountService , private authService:AuthService) {
   }
   ngOnInit() : void{
 
@@ -95,5 +96,9 @@ export class SafePageComponent {
       this.dataSource._updateChangeSubscription();
       this.dialog.closeAll();
     })
+  }
+  logOut()
+  {
+    this.authService.logout();
   }
 }
