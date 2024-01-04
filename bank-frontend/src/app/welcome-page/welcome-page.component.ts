@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthService} from "../services/auth.service";
 import {BankUserService} from "../services/bank-user.service";
 import {Account} from "../model/account";
 @Component({
@@ -28,5 +27,16 @@ export class WelcomePageComponent {
 
   navigateToSafesPage() {
     this.router.navigate(['safes', {iban: this.account.iban}]).then(r => r);
+  }
+
+  navigateToTransactionsPage() {
+    this.router.navigate(['transactions', {iban: this.account.iban}]).then(r => r);
+
+  }
+
+  navigateToAccountPage()
+  {
+    this.router.navigate(['account', {iban: this.account.iban, account: this.account}]).then(r => r);
+
   }
 }

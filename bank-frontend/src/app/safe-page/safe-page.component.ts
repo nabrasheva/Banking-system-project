@@ -40,7 +40,7 @@ export class SafePageComponent {
       }
     })
 
-    this.dataSource.data.push({name:'Nia'}, {name:'Ani'});
+    //this.dataSource.data.push({name:'Nia'}, {name:'Ani'});
   }
 
   findSafeByName(name:string):Safe | undefined

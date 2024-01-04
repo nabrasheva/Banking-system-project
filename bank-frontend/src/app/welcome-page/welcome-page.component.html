@@ -14,8 +14,8 @@
   <span class="welcome_text">Choose from:</span>
 </p>
 <p class="button-row">
-  <button mat-raised-button color="primary" [routerLink]="['../login']">View Account</button>
-  <button mat-raised-button color="accent" [routerLink]="['../login']">Transactions</button>
+  <button mat-raised-button color="primary" (click)="navigateToAccountPage()">View Account</button>
+  <button mat-raised-button color="accent" (click)="navigateToTransactionsPage()">Transactions</button>
   <button mat-raised-button color="warn" (click)="navigateToSafesPage()" >Safes</button>
 </p>
 </div>
