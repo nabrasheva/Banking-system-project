@@ -22,6 +22,7 @@ import { SendMoneyComponent } from './send-money/send-money.component';
 import { TakeLoanComponent } from './take-loan/take-loan.component';
 import { ReturnLoanComponent } from './return-loan/return-loan.component';
 import { AccountPageComponent } from './account-page/account-page.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AccountPageComponent } from './account-page/account-page.component';
     SendMoneyComponent,
     TakeLoanComponent,
     ReturnLoanComponent,
-    AccountPageComponent
+    AccountPageComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,
