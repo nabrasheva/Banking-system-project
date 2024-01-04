@@ -1,0 +1,38 @@
+<p>
+    <mat-toolbar id="header">
+        <span id="header_toolbar">Online Banking System</span>
+        <span class="spacer"></span>
+        <button mat-fab extended="" color="primary" class="header-btn" ><a [routerLink]="['/welcomePage']" >Back</a></button>
+        <button  mat-fab extended="" color="primary" class="header-btn" (click)="logOut()" >Log Out</button>
+    </mat-toolbar>
+</p>
+
+<div class="profile_info">
+    <mat-card class="example-card" >
+        <mat-card-header>
+            <mat-card-title-group>
+                <mat-card-title>Profile</mat-card-title>
+            </mat-card-title-group>
+        </mat-card-header>
+        <mat-card-content>
+            <h3>Information</h3>
+            <mat-list>
+                <mat-list-item>
+                    <span matListItemTitle>Username</span>
+                    <span matListItemLine>{{user.username}}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Email</span>
+                    <span matListItemLine>{{user.email}}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Country</span>
+                    <span matListItemLine>{{user.country}}</span>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+    </mat-card>
+
+    <button mat-raised-button color="primary" (click)="updateUser()">Send Money</button>
+
+</div>
