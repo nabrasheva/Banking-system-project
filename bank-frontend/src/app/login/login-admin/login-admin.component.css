@@ -8,8 +8,8 @@
 }
 mat-card{
   min-width: 50%;
-  background: linear-gradient(90deg, #f7fafc, #66696b);;
-  box-shadow: 0 8px 10px rgb(184, 0, 253);
+  background: linear-gradient(90deg, #f7fafc, lightblue);;
+  box-shadow: 0 8px 10px #66696b;
 }
 
 mat-card-header{
