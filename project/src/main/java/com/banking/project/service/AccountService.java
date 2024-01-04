@@ -20,11 +20,11 @@ public interface AccountService {
 
     void deleteSafeByNameAndIban(String name, String iban);
 
-    void sendMoney(String senderIban, TransactionDto transactionDto);
+    TransactionDto sendMoney(String senderIban, TransactionDto transactionDto);
 
-    void takeLoan(LoanDto loanDto);
+    TransactionDto takeLoan(LoanDto loanDto);
 
-    void returnLoan(LoanDto loanDto);
+    TransactionDto returnLoan(LoanDto loanDto);
 
     AccountDto getAccountByIban(String iban);
 

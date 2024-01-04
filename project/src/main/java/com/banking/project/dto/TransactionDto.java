@@ -28,4 +28,6 @@ public class TransactionDto {
 
     @Value("false")
     private boolean creditPayment;
+
+    private Long issueDate;
 }
