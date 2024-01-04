@@ -15,7 +15,7 @@
 
   <mat-form-field>
     <mat-label>Initial funds</mat-label>
-    <textarea matInput id="initialFunds" formControlName="initialFunds"></textarea>
+    <input matInput id="initialFunds" formControlName="initialFunds">
     <mat-error *ngIf="this.safeForm.get('initialFunds')?.hasError('required')">Initial funds is required</mat-error>
 
   </mat-form-field>

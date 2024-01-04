@@ -9,7 +9,7 @@ import {Safe} from "../model/safe";
   styleUrl: './enter-safe-key.component.css'
 })
 export class EnterSafeKeyComponent {
-  @Input() key!:string;
+  key!:string;
   @Output() emitter = new EventEmitter<any>();
 
   keyForm!:FormGroup;
@@ -27,6 +27,9 @@ export class EnterSafeKeyComponent {
   }
 
   authenticateSafeView() {
+    if(!this.keyForm.valid){
+      return;
+    }
     if(this.keyForm.get('key')?.value === this.key)
     {
       this.emitter.emit(true);

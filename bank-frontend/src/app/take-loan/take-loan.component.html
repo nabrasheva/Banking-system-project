@@ -1,0 +1,14 @@
+<div id="create-form" [formGroup]="loanForm">
+  <mat-form-field>
+    <mat-label>Amount</mat-label>
+    <input matInput id="creditAmount" formControlName="creditAmount" type="number">
+    <mat-error *ngIf="this.loanForm.get('creditAmount')?.hasError('required')">Amount is required</mat-error>
+    <mat-error *ngIf="this.loanForm.get('creditAmount')?.hasError('pattern')">Money should be valid number</mat-error>
+
+  </mat-form-field>
+
+  <button type="submit" mat-stroked-button color="primary" (click)="takeLoan()" >Take Loan</button>
+
+  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>

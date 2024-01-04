@@ -5,7 +5,7 @@
     <textarea matInput id="key-input" formControlName="key"></textarea>
   </mat-form-field>
 
-  <button type="submit" mat-stroked-button color="primary" (click)="authenticateSafeView()" >Update Task</button>
+  <button type="submit" mat-stroked-button color="primary" (click)="authenticateSafeView()" >Authenticate</button>
 
  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
 

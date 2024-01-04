@@ -16,6 +16,12 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { ShowSafeComponent } from './show-safe/show-safe.component';
 import { CreateSafeComponent } from './create-safe/create-safe.component';
 import {HttpClientModule} from "@angular/common/http";
+import { UpdateSafeComponent } from './update-safe/update-safe.component';
+import { TransactionsPageComponent } from './transactions-page/transactions-page.component';
+import { SendMoneyComponent } from './send-money/send-money.component';
+import { TakeLoanComponent } from './take-loan/take-loan.component';
+import { ReturnLoanComponent } from './return-loan/return-loan.component';
+import { AccountPageComponent } from './account-page/account-page.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +35,13 @@ import {HttpClientModule} from "@angular/common/http";
     EnterSafeKeyComponent,
     ErrorPageComponent,
     ShowSafeComponent,
-    CreateSafeComponent
+    CreateSafeComponent,
+    UpdateSafeComponent,
+    TransactionsPageComponent,
+    SendMoneyComponent,
+    TakeLoanComponent,
+    ReturnLoanComponent,
+    AccountPageComponent
   ],
   imports: [
     BrowserModule,

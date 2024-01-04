@@ -1,0 +1,29 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <caption>Safes</caption>
+
+  <ng-container matColumnDef="sentAmount">
+    <th mat-header-cell *matHeaderCellDef> Sent Amount </th>
+    <td mat-cell *matCellDef="let element"> {{element.sentAmount}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="receiverIban">
+    <th mat-header-cell *matHeaderCellDef> Receiver Iban </th>
+    <td mat-cell *matCellDef="let element"> {{element.receiverIban}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="reason">
+    <th mat-header-cell *matHeaderCellDef> Reason </th>
+    <td mat-cell *matCellDef="let element"> {{element.reason}} </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<p class="button-row">
+  <button mat-raised-button color="primary" (click)="sendMoney()">Send Money</button>
+  <button mat-raised-button color="accent" (click)="takeLoan()">Take Loan</button>
+  <button mat-raised-button color="warn" (click)="returnLoan()">Return Loan</button>
+</p>

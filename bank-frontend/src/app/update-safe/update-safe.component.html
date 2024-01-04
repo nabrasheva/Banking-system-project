@@ -1,0 +1,15 @@
+<div id="enter-form" [formGroup]="moneyForm">
+
+  <mat-form-field>
+    <mat-label>Enter Money</mat-label>
+    <input matInput id="money" formControlName="money">
+    <mat-error *ngIf="this.moneyForm.get('money')?.hasError('pattern')">Money should be valid number</mat-error>
+
+  </mat-form-field>
+
+  <button type="submit" mat-stroked-button color="primary" (click)="updateSafeMoney()" >Add money</button>
+
+  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>
+
