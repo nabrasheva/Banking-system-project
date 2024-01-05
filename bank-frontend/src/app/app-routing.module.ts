@@ -6,6 +6,7 @@ import {LoginUserComponent} from "./login/login-user/login-user.component";
 import {SafePageComponent} from "./safe-page/safe-page.component";
 import {TransactionsPageComponent} from "./transactions-page/transactions-page.component";
 import {AccountPageComponent} from "./account-page/account-page.component";
+import {ProfilePageComponent} from "./profile-page/profile-page.component";
 import {LoginAdminComponent} from "./login/login-admin/login-admin.component";
 
 const routes: Routes = [{path: 'login', component: LoginUserComponent},
@@ -14,7 +15,8 @@ const routes: Routes = [{path: 'login', component: LoginUserComponent},
   {path: 'welcomePage', component: WelcomePageComponent},
   {path: 'safes', component: SafePageComponent},
   { path: 'transactions', component: TransactionsPageComponent },
-  { path: 'account', component: AccountPageComponent }];
+  { path: 'account', component: AccountPageComponent },
+  { path: 'profile', component: ProfilePageComponent }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

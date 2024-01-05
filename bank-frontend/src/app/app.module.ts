@@ -22,6 +22,8 @@ import { SendMoneyComponent } from './send-money/send-money.component';
 import { TakeLoanComponent } from './take-loan/take-loan.component';
 import { ReturnLoanComponent } from './return-loan/return-loan.component';
 import { AccountPageComponent } from './account-page/account-page.component';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 
 @NgModule({
@@ -43,7 +45,9 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
     TakeLoanComponent,
     ReturnLoanComponent,
     AccountPageComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    ProfilePageComponent,
+    UpdateBankUserComponent
   ],
   imports: [
     BrowserModule,

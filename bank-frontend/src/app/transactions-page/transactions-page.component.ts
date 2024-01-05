@@ -8,6 +8,7 @@ import {AccountService} from "../services/account.service";
 import {SendMoneyComponent} from "../send-money/send-money.component";
 import {TakeLoanComponent} from "../take-loan/take-loan.component";
 import {ReturnLoanComponent} from "../return-loan/return-loan.component";
+import {AuthService} from "../services/auth.service";
 
 
 @Component({
@@ -20,7 +21,7 @@ export class TransactionsPageComponent {
   transactions!: Transaction[];
   dataSource: MatTableDataSource<TransactionRow> = new MatTableDataSource();
   iban!:string;
-  constructor(private dialog: MatDialog,private route: ActivatedRoute, private router: Router, private accountService:AccountService) {
+  constructor(private dialog: MatDialog,private route: ActivatedRoute, private router: Router, private accountService:AccountService, private authService:AuthService) {
   }
 
   ngOnInit() : void{
@@ -95,5 +96,10 @@ export class TransactionsPageComponent {
       this.dataSource._updateChangeSubscription();
       this.dialog.closeAll();
     });
+  }
+
+  logOut()
+  {
+    this.authService.logout();
   }
 }

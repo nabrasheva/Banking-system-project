@@ -102,7 +102,9 @@ public class AccountServiceImpl implements AccountService {
         if (yearsDifference.equals(BigDecimal.ZERO)) {
             account.setAvailableAmount(account.getAvailableAmount().add(initialFunds));
         } else {
-            final BigDecimal newFunds = yearsDifference.multiply(initialFunds).multiply(BigDecimal.valueOf(0.5));
+            BigDecimal annualInterestRate = BigDecimal.valueOf(0.01);
+            BigDecimal ratePlusOne = BigDecimal.ONE.add(annualInterestRate);
+            BigDecimal newFunds = initialFunds.multiply(ratePlusOne.pow(yearsDifference.intValue()));
             account.setAvailableAmount(account.getAvailableAmount().add(newFunds));
         }
 
@@ -221,7 +223,7 @@ public class AccountServiceImpl implements AccountService {
 
         account.setAvailableAmount(account.getAvailableAmount().subtract(amount));
         account.setCreditAmount(account.getCreditAmount().subtract(amount));
-        final Transaction transaction = Transaction.builder().sentAmount(amount.negate()).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
+        final Transaction transaction = Transaction.builder().sentAmount(amount.negate()).reason("Returning a loan").issueDate(LocalDateTime.now()).creditPayment(true).build();
         account.getTransactions().add(transaction);
 
         accountRepository.save(account);
