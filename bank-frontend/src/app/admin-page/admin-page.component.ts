@@ -51,11 +51,16 @@ export class AdminPageComponent {
   }
 
   getBankCard() {
-    if (this.iban) {
-      this.accountService.getCreditCard(this.iban).subscribe(data => {
-        this.card = data;
-      });
-    }
+    const ibanControl =this.adminForm.get('iban')
+   if (ibanControl && ibanControl.valid) {
+     const iban = ibanControl.value;
+
+     if (iban) {
+       this.accountService.getCreditCard(iban).subscribe(data => {
+         this.card = data;
+       });
+     }
+   }
   }
 
   getAccount() {
