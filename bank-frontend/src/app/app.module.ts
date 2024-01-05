@@ -24,6 +24,7 @@ import { ReturnLoanComponent } from './return-loan/return-loan.component';
 import { AccountPageComponent } from './account-page/account-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.com
     AppRoutingModule,
     MaterialUiModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
