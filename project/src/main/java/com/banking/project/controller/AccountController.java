@@ -20,6 +20,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/account")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class AccountController {
     private final AccountService accountService;
 

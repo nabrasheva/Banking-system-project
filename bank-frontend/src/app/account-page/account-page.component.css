@@ -1,21 +1,22 @@
 .spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .header-btn {
-    margin: 10px;
-    cursor: pointer; /* Add this to make the text cursor on hover */
+  margin: 10px;
+  cursor: pointer;
+  background-color: white;
+  color: #182B3A;/* Add this to make the text cursor on hover */
 }
-
 #header {
-    background: darkorange;
-    display: flex;
-    justify-content: space-between; /* Align items horizontally */
-    padding: 10px; /* Adjust padding for better appearance */
+  background: linear-gradient(90deg,  lightblue, #717676);
+  display: flex;
+  justify-content: space-between; /* Align items horizontally */
+  padding: 10px; /* Adjust padding for better appearance */
 }
 
 #header_toolbar {
-    font-size: 20px; /* Adjust font size if needed */
+  font-size: 20px; /* Adjust font size if needed */
 }
 
 .example-card {

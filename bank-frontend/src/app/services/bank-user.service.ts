@@ -19,7 +19,7 @@ export class BankUserService {
     return this.http.get(`http://localhost:8080/user/account?email=${email}`, { headers: this.headers });
   }
 
-  getBankUserByEmail(email:string): Observable<any>{
+  getUserByEmail(email:string): Observable<any>{
     return this.http.get(`http://localhost:8080/user?email=${email}`, { headers: this.headers });
   }
 

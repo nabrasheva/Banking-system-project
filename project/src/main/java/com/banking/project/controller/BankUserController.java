@@ -18,6 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class BankUserController {
     private final BankUserService bankUserService;
 

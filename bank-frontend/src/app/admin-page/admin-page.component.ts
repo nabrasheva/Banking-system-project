@@ -7,6 +7,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AccountService} from "../services/account.service";
 import {BankUserService} from "../services/bank-user.service";
 import {DebitCard} from "../model/debit-card";
+import {BankUser} from "../model/bank-user";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-admin-page',
@@ -14,15 +17,22 @@ import {DebitCard} from "../model/debit-card";
   styleUrl: './admin-page.component.css'
 })
 export class AdminPageComponent {
+  adminForm: FormGroup;
   account!: Account;
   transactions!: Transaction[];
   safes!: Safe[];
   card!: DebitCard;
+  user!: BankUser;
   iban!: string;
   email!: string;
 
-  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private bankUserService: BankUserService) {
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private bankUserService: BankUserService, private fb: FormBuilder,private authService:AuthService) {
+    this.adminForm = this.fb.group({
+      email: ['', Validators.email],
+      iban: ['', Validators.required]
+    });
   }
+
 
   getTransactions() {
     if (this.iban) {
@@ -50,10 +60,28 @@ export class AdminPageComponent {
 
   getAccount() {
     if (this.email) {
-      this.bankUserService.getBankUserByEmail(this.email).subscribe(data => {
+      this.bankUserService.getAccountByBankUser(this.email).subscribe(data => {
         this.account = data;
-
       });
     }
+  }
+
+  getBankUser() {
+    const emailControl = this.adminForm.get('email');
+
+    if (emailControl && emailControl.valid) {
+      const email = emailControl.value;
+
+      if (email) {
+        this.bankUserService.getUserByEmail(email).subscribe(data => {
+          console.log('Data received:', data);
+          this.user = data;
+        });
+      }
+    }
+  }
+
+  logOut() {
+    this.authService.logout();
   }
 }
