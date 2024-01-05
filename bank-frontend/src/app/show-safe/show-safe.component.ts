@@ -6,6 +6,7 @@ import {ShowSafeRow} from "../model/show-safe-row";
 import {SafeRow} from "../model/SafeRow";
 import {AccountService} from "../services/account.service";
 import {UpdateSafeComponent} from "../update-safe/update-safe.component";
+import {SafeService} from "../services/safe.service";
 @Component({
   selector: 'app-show-safe',
   templateUrl: './show-safe.component.html',
@@ -18,7 +19,7 @@ export class ShowSafeComponent {
   dataSource: MatTableDataSource<ShowSafeRow> = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'funds', 'update_btn', 'delete_btn'];
   iban!:string;
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private dialogData: any, private accountService: AccountService) {}
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private dialogData: any, private accountService: AccountService, private safeService: SafeService) {}
 
   ngOnInit()
   {
@@ -48,15 +49,24 @@ export class ShowSafeComponent {
       data: { iban: this.iban, name: element.name }
     });
 
-    dialogRef.componentInstance.emitter.subscribe((money:number)=>{
+    dialogRef.componentInstance.emitter.subscribe((name:string)=>{
       let safe = this.dataSource.data.at(0);
       if(safe !== undefined)
       {
-        const funds = safe.funds;
-        safe.funds = funds + money;
-        this.dataSource.data.pop();
-        this.dataSource.data.push(safe);
-        this.dataSource._updateChangeSubscription();
+        this.safeService.getSafeByName(name).subscribe({
+          next:value => {
+            const showSafeRow: ShowSafeRow = {
+              name: value.name,
+              funds: value.initialFunds
+            }
+            this.dataSource.data.pop();
+            this.dataSource.data.push(showSafeRow);
+            this.dataSource._updateChangeSubscription();
+          },
+          error: err => {
+           console.log(err);
+          }
+        })
       }
       this.dialog.closeAll();
     })

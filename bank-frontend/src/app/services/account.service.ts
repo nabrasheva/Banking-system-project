@@ -39,7 +39,7 @@ export class AccountService {
     return this.http.post(`http://localhost:8080/account/${iban}/safe`, safe, { headers: this.headers });
   }
 
-  updateAccountForSafe(iban:string, name:string, funds:number): Observable<any>
+  updateSafe(iban:string, name:string, funds:number): Observable<any>
   {
     return this.http.patch(`http://localhost:8080/account/${iban}/safe?name=${name}&funds=${funds.toString()}`, {}, { headers: this.headers });
 

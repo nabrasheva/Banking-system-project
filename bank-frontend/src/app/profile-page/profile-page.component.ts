@@ -7,6 +7,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {SendMoneyComponent} from "../send-money/send-money.component";
 import {UpdateBankUserComponent} from "../update-bank-user/update-bank-user.component";
 import {Transaction} from "../model/transaction";
+import {UpdateBankUser} from "../model/update-bank-user";
 
 @Component({
     selector: 'app-profile-page',
@@ -42,11 +43,12 @@ export class ProfilePageComponent {
 
     updateUser() {
         const dialogRef: MatDialogRef<UpdateBankUserComponent, any> = this.dialog.open(UpdateBankUserComponent, {
-            data: { username: this.user.username, password: this.user.password }
+            data: { username: this.user.username, password: this.user.password, user_email:this.user_email }
         });
 
-        dialogRef.componentInstance.emitter.subscribe((transactions: Transaction[]) => {
-
+        dialogRef.componentInstance.emitter.subscribe((userCredentials: UpdateBankUser) => {
+            this.user.username = userCredentials.username;
+            this.user.password = userCredentials.password;
             this.dialog.closeAll();
         });
     }

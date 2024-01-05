@@ -25,7 +25,7 @@ public class SafeController {
 
     @GetMapping(params = "name")
     @ResponseStatus(value = OK)
-    public SafeDto getAllSafes(@RequestParam(required = false) final String name) {
+    public SafeDto getSafeByName(@RequestParam(required = false) final String name) {
         return safeService.getSafeByName(name);
     }
 }

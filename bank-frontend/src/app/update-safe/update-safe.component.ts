@@ -34,17 +34,23 @@ export class UpdateSafeComponent {
     this.errorMessage = '';
   }
 
+  public showError(message:string): void {
+    this.error = true;
+    this.errorMessage = message;
+  }
+
   updateSafeMoney() {
     if(!this.moneyForm.valid){
       return;
     }
     const money = this.moneyForm.get('money')?.value;
-    this.accountService.updateAccountForSafe(this.iban, this.name, money).subscribe({
+    this.accountService.updateSafe(this.iban, this.name, money).subscribe({
       next: value => {
-        this.emitter.emit(money);
+        this.emitter.emit(this.name);
       },
       error: err => {
         console.log(err);
+        this.showError(err);
       }
     });
 
