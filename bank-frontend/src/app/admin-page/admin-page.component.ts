@@ -48,9 +48,12 @@ export class AdminPageComponent {
     }
   }
 
-getAccount() {
-    if (this.email){
-      this.bankUserService
+  getAccount() {
+    if (this.email) {
+      this.bankUserService.getAccountByEmail(this.email).subscribe(data => {
+        this.account = data;
+
+      });
     }
-}
+  }
 }
