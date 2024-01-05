@@ -8,9 +8,11 @@ import {TransactionsPageComponent} from "./transactions-page/transactions-page.c
 import {AccountPageComponent} from "./account-page/account-page.component";
 import {ProfilePageComponent} from "./profile-page/profile-page.component";
 import {LoginAdminComponent} from "./login/login-admin/login-admin.component";
+import {AdminPageComponent} from "./admin-page/admin-page.component";
 
 const routes: Routes = [{path: 'login', component: LoginUserComponent},
-  {path: "loginAdmin", component: LoginAdminComponent},
+  {path: 'loginAdmin', component: LoginAdminComponent},
+  {path: 'admin',component:AdminPageComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'welcomePage', component: WelcomePageComponent},
   {path: 'safes', component: SafePageComponent},

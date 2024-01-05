@@ -25,6 +25,7 @@ import { AccountPageComponent } from './account-page/account-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import { HeaderComponent } from './partial/header/header.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
     AccountPageComponent,
     AdminPageComponent,
     ProfilePageComponent,
-    UpdateBankUserComponent
+    UpdateBankUserComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

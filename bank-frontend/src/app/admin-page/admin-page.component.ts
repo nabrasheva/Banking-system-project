@@ -50,7 +50,7 @@ export class AdminPageComponent {
 
   getAccount() {
     if (this.email) {
-      this.bankUserService.getAccountByEmail(this.email).subscribe(data => {
+      this.bankUserService.getBankUserByEmail(this.email).subscribe(data => {
         this.account = data;
 
       });
