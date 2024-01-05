@@ -12,4 +12,6 @@ export class UpdateBankUserComponent {
   @Output() emitter = new EventEmitter<any>();
   constructor(@Inject(MAT_DIALOG_DATA) private dialogData: any,private fb: FormBuilder, private userService:BankUserService) {
   }
+
+
 }
