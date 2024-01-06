@@ -1,1 +1,20 @@
-<p>update-bank-user works!</p>
+<div id="enter-form" [formGroup]="userForm">
+
+  <mat-form-field>
+    <mat-label>Enter New Username</mat-label>
+    <input matInput id="username" formControlName="username">
+
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Enter New Password</mat-label>
+    <input matInput id="password" formControlName="password">
+    <mat-error *ngIf="this.userForm.get('password')?.hasError('pattern')">Money should be valid number</mat-error>
+
+  </mat-form-field>
+
+  <button type="submit" mat-stroked-button color="primary" (click)="updateUser()" >Update</button>
+
+  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>

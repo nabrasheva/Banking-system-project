@@ -97,8 +97,14 @@ public class BankUserServiceImpl implements BankUserService {
     public void updateUsernameAndPassword(final String email, final UpdateBankUserDto bankUser) {
         final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        user.setUsername(bankUser.getUsername());
-        user.setPassword(bankUser.getPassword());
+        if(!bankUser.getUsername().isBlank())
+        {
+            user.setUsername(bankUser.getUsername());
+        }
+        if(!bankUser.getPassword().isBlank())
+        {
+            user.setPassword(bankUser.getPassword());
+        }
 
         bankUserRepository.save(user);
     }
