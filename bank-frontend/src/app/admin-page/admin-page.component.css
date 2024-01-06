@@ -27,6 +27,8 @@
 }
 .cards-container {
   display: flex;
+  flex-direction: column; /* Change to column */
+  align-items: center;
   flex-wrap: wrap;
   justify-content: space-between;
 }
@@ -35,11 +37,13 @@
   display: flex;
   justify-content: center;
   width: 49%; /* Adjust as needed, leaving some space for margins/padding */
-  margin-bottom: 2%; /* Adjust as needed */
+  margin-bottom: 2%;
+
 }
 
 .card {
   width: 100%;
+  background: linear-gradient(90deg,  white,lightblue)
 }
 
 .content {

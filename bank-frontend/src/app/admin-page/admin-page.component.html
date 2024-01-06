@@ -2,16 +2,67 @@
   <mat-toolbar id="header">
     <span id="header_toolbar">Online Banking System</span>
     <span class="spacer"></span>
-    <button mat-fab extended="" class="header-btn"><a [routerLink]="['/welcomePage']">Back</a></button>
-    <button mat-fab extended="" class="header-btn" (click)="logOut()">Logout</button>
+    <button mat-fab extended="" color="info" class="header-btn" (click)="logOut()">Logout</button>
   </mat-toolbar>
 </p>
 <div class=" cards-container">
+  <div class="container" [formGroup]="emailForm">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>User and Account Info</mat-card-title>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        <label for="email">Enter EMAIL:</label>
+        <input type="text" id="email" required formControlName="email"/>
+        <button (click)="getInfoByEmail()">Get User Info</button>
+      </mat-card-content>
+      <mat-card-content class="card-content">
+        <div class="user-info">
+          <h3>User Information</h3>
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>Username</span>
+              <span matListItemLine>{{ user?.username }}</span>
+            </mat-list-item>
+            <mat-list-item>
+              <span matListItemTitle>Email</span>
+              <span matListItemLine>{{ user?.email }}</span>
+            </mat-list-item>
+            <mat-list-item>
+              <span matListItemTitle>Country</span>
+              <span matListItemLine>{{ user?.country }}</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-card-content>
+      <mat-card-content class="card-content">
+        <div class="account-info">
+          <h3>Account Information</h3>
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>Iban</span>
+              <span matListItemLine>{{ account?.iban }}</span>
+            </mat-list-item>
+            <mat-list-item>
+              <span matListItemTitle>Available amount</span>
+              <span matListItemLine>{{ account?.availableAmount }}</span>
+            </mat-list-item>
+            <mat-list-item>
+              <span matListItemTitle>Credit amount</span>
+              <span matListItemLine>{{ account?.creditAmount }}</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
   <div class="container" [formGroup]="ibanForm">
     <mat-card class="card">
       <mat-card-header>
         <mat-card-title-group>
-          <mat-card-title>Debit Card</mat-card-title>
+          <mat-card-title>Additional Information</mat-card-title>
         </mat-card-title-group>
       </mat-card-header>
       <mat-card-content>
@@ -25,115 +76,64 @@
           <mat-list>
             <mat-list-item>
               <span matListItemTitle>Number</span>
-              <span matListItemLine>{{ card.number }}</span>
+              <span matListItemLine>{{ card?.number }}</span>
             </mat-list-item>
             <mat-list-item>
               <span matListItemTitle>Expiry Date</span>
-              <span matListItemLine>{{ card.expiryDate }}</span>
+              <span matListItemLine>{{ card?.expiryDate }}</span>
             </mat-list-item>
             <mat-list-item>
               <span matListItemTitle>CVV</span>
-              <span matListItemLine>{{ card.cvv }}</span>
+              <span matListItemLine>{{ card?.cvv }}</span>
             </mat-list-item>
           </mat-list>
         </div>
       </mat-card-content>
-      <mat-card-content class="content">
-        <div class="card-info">
-          <h3> Safe Information</h3>
-          <mat-list *ngFor="let safe of safesCards">
-            <mat-list-item>
+      <mat-card-content class="content" >
+        <mat-list>
+          <mat-list-item *ngFor="let safe of safesCards">
+            <h3> Safes Information</h3>
+            <p>
               <span matListItemTitle>Safe name</span>
-              <span matListItemLine >{{ safe.name }}</span>
-            </mat-list-item>
-            <mat-list-item>
+              <span matListItemLine>{{ safe?.name }}</span>
+            </p>
+
+
+            <p>
               <span matListItemTitle>Safe key</span>
-              <span matListItemLine>{{ safe.key }}</span>
-            </mat-list-item>
-            <mat-list-item>
+              <span matListItemLine>{{ safe?.key }}</span>
+            </p>
+
+
+            <p>
               <span matListItemTitle>Initial funds</span>
-              <span matListItemLine>{{ safe.initialFunds}}</span>
-            </mat-list-item>
-          </mat-list>
-        </div>
-      </mat-card-content>
-      <mat-card-content class="content">
-        <div class="transaction-info">
-          <h3> Transaction Information</h3>
-          <mat-list *ngFor="let transaction of transactions">
-            <mat-list-item>
+              <span matListItemLine>{{ safe?.initialFunds }}</span>
+            </p>
+          </mat-list-item>
+          <mat-list-item *ngFor="let transaction of transactions">
+            <h3> Transactions Information</h3>
+            <p>
               <span matListItemTitle>Sent amount</span>
-              <span matListItemLine >{{ transaction.sentAmount}}</span>
-            </mat-list-item>
-            <mat-list-item>
+              <span matListItemLine>{{ transaction?.sentAmount }}</span>
+            </p>
+            <p>
               <span matListItemTitle>Receiver iban</span>
-              <span matListItemLine>{{ transaction.receiverIban }}</span>
-            </mat-list-item>
-            <mat-list-item>
+              <span matListItemLine>{{ transaction?.receiverIban }}</span>
+            </p>
+
+            <p>
               <span matListItemTitle>Reason</span>
-              <span matListItemLine>{{ transaction.reason}}</span>
-            </mat-list-item>
-            <mat-list-item>
+              <span matListItemLine>{{ transaction?.reason }}</span>
+            </p>
+
+            <p>
               <span matListItemTitle>Issue data</span>
-              <span matListItemLine>{{ transaction.issueDate}}</span>
-            </mat-list-item>
-          </mat-list>
-        </div>
+              <span matListItemLine>{{ transaction?.issueDate }}</span>
+            </p>
+          </mat-list-item>
+        </mat-list>
       </mat-card-content>
     </mat-card>
   </div>
-<div class="container" [formGroup]="emailForm">
-  <mat-card class="card">
-    <mat-card-header>
-      <mat-card-title-group>
-        <mat-card-title>User and Account Info</mat-card-title>
-      </mat-card-title-group>
-    </mat-card-header>
-    <mat-card-content>
-      <label for="email">Enter EMAIL:</label>
-      <input type="text" id="email" required formControlName="email"/>
-      <button (click)="getInfoByEmail()">Get User Info</button>
-    </mat-card-content>
-    <mat-card-content class="card-content">
-      <div class="user-info">
-        <h3>User Information</h3>
-        <mat-list>
-          <mat-list-item>
-            <span matListItemTitle>Username</span>
-            <span matListItemLine>{{ user.username }}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>Email</span>
-            <span matListItemLine>{{ user.email }}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>Country</span>
-            <span matListItemLine>{{ user.country }}</span>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </mat-card-content>
-    <mat-card-content class="card-content">
-      <div class="account-info">
-        <h3>Account Information</h3>
-        <mat-list>
-          <mat-list-item>
-            <span matListItemTitle>Iban</span>
-            <span matListItemLine>{{ account.iban }}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>Available amount</span>
-            <span matListItemLine>{{ account.availableAmount }}</span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>Credit amount</span>
-            <span matListItemLine>{{ account.creditAmount }}</span>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </mat-card-content>
-  </mat-card>
-</div>
-
 </div>
 

@@ -79,9 +79,10 @@ export class AdminPageComponent {
   getTransactions() {
     const iban = this.getIban();
     if (iban) {
-      this.accountService.getSafesByAccount(iban).subscribe({
+      this.accountService.getTransactionsByAccount(iban).subscribe({
         next: (data) =>{
           this.transactions = data;
+          console.log(data)
           this.transactionCards = this.transactions.map(transaction => ({
             sentAmount:transaction.sentAmount,
             receiverIban: transaction.receiverIban,
@@ -89,6 +90,7 @@ export class AdminPageComponent {
             creditPayment:transaction.creditPayment,
             issueDate:transaction.issueDate
           }));
+          console.log("Tran",this.transactionCards)
       },
         error:(error) =>{
           console.log(error)
@@ -140,10 +142,9 @@ export class AdminPageComponent {
   }
 
 getInfoByIban(){
-
-    this.getBankCard();
-    this.getSafes();
-    this.getTransactions()
+  this.getBankCard();
+  this.getSafes();
+  this.getTransactions();
 
 }
 
