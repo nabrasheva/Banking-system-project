@@ -25,6 +25,7 @@ import { AccountPageComponent } from './account-page/account-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
     AppRoutingModule,
     MaterialUiModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
