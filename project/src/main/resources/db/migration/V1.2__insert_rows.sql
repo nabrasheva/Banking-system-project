@@ -5,13 +5,16 @@ VALUES ('1234567890123456', '2023-12-31', 123),
 
 INSERT INTO public.account (iban, available_amount, credit_amount, debit_card_id)
 VALUES ('IBAN123456789', 1000.00, 100, 1),
-       ('IBAN987654321', 500.50, null, 2),
+       ('IBAN987654321', 500.50, 0.00, 2),
        ('IBAN987654325', 999.99, 500, 3);
 
 INSERT INTO public.bank_user (email, username, password, country, role, account_id)
-VALUES ('email1@gmail.com', 'user1', 'password1', 'Country1', 'USER', 1),
-       ('email2@gmail.com', 'user2', 'password2', 'Country2', 'ADMIN', 2),
-       ('email3@gmail.com', 'userN', 'passwordN', 'CountryN', 'USER', 3);
+VALUES ('user1@gmail.com', 'user1', '$2a$10$2sZZVIg5Zno9sG6SqQ4OPuSwDJr6hTnsErnrKTSOkDyyIDu7sfiea', 'Country1', 'USER',
+        1),
+       ('admin@gmail.com', 'admin', '$2a$10$aSHo/fBPG4vNdilwJwqqVeCSSc644QNT81N644rCqs0NfLK2NgMla', 'Country2',
+        'ADMIN', 2),
+       ('user2@gmail.com', 'user2', '$2a$10$zYh.At7anoikUklOuSDLp.Pvqy2ALKW.skdwKYJVpPaza69XlvA/m', 'CountryN', 'USER',
+        3);
 
 INSERT INTO public.safe (name, key, initial_funds, account_id, creation_date)
 VALUES ('Safe1', 'Key1', 100.00, 1, '2023-12-01'),

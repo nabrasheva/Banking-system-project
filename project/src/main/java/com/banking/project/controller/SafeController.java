@@ -14,6 +14,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RequestMapping("/safe")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class SafeController {
     private final SafeService safeService;
 
@@ -25,7 +26,7 @@ public class SafeController {
 
     @GetMapping(params = "name")
     @ResponseStatus(value = OK)
-    public SafeDto getAllSafes(@RequestParam(required = false) final String name) {
+    public SafeDto getSafeByName(@RequestParam(required = false) final String name) {
         return safeService.getSafeByName(name);
     }
 }
