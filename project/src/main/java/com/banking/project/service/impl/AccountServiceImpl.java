@@ -57,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long createSafeForAccount(final String iban, final SafeDto safeDto) {
+    public SafeDto createSafeForAccount(final String iban, final SafeDto safeDto) {
         final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (safeService.doesNameExist(safeDto.getName())) {
@@ -68,6 +68,7 @@ public class AccountServiceImpl implements AccountService {
                 .name(safeDto.getName())
                 .key(safeDto.getKey())
                 .initialFunds(safeDto.getInitialFunds())
+                .creationDate(LocalDate.now())
                 .build();
 
         if ((safeDto.getInitialFunds().compareTo(BigDecimal.ZERO) == 0) || (safe.getInitialFunds().compareTo(account.getAvailableAmount()) > 0)) {
@@ -81,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.save(account);
 
-        return safe.getId();
+        return mapper.map(safe, SafeDto.class);
     }
 
     @Override
@@ -153,7 +154,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public TransactionDto sendMoney(final String senderIban, final TransactionDto transactionDto) {
+    public TransactionDto  sendMoney(final String senderIban, final TransactionDto transactionDto) {
         final BigDecimal amount = transactionDto.getSentAmount();
         final String receiverIban = transactionDto.getReceiverIban();
 
@@ -198,6 +199,7 @@ public class AccountServiceImpl implements AccountService {
 
         final Transaction transaction = Transaction.builder().sentAmount(amount).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
         account.getTransactions().add(transaction);
+
 
         accountRepository.save(account);
         return  mapper.map(transaction,TransactionDto.class);

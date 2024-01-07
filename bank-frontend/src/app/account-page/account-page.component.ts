@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {AccountService} from "../services/account.service";
@@ -12,29 +12,37 @@ import {DebitCard} from "../model/debit-card";
   styleUrl: './account-page.component.css'
 })
 export class AccountPageComponent {
-  iban!:string;
-  account!:Account;
-  card!:DebitCard;
-  constructor(private accountService:AccountService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private authService:AuthService) {
+  iban!: string;
+  account!: Account;
+  card!: DebitCard;
+
+  constructor(private accountService: AccountService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private authService: AuthService) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.route.params.subscribe(params => {
       this.iban = params['iban'];
-      this.account = params['account'];
     });
 
+    this.accountService.getAccountByIban(this.iban).subscribe({
+      next: value => {
+        this.account = value;
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
     this.accountService.getCreditCard(this.iban).subscribe({
-        next: value => {
-            this.card = value;
-        },
-        error: err => {
-            console.log(err);
-        }
+      next: value => {
+        this.card = value;
+      },
+      error: err => {
+        console.log(err);
+      }
     })
   }
-  logOut()
-  {
+
+  logOut() {
     this.authService.logout();
   }
 }

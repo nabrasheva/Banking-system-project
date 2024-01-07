@@ -20,16 +20,17 @@ import {AuthService} from "../services/auth.service";
 export class AdminPageComponent {
   emailForm: FormGroup;
   ibanForm: FormGroup;
-  account!: Account;
+  account!: Account | undefined;
   transactions!: Transaction[];
   safes!: Safe[];
-  card!: DebitCard;
-  user!: BankUser;
+  card!: DebitCard | undefined;
+  user!: BankUser | undefined;
   iban!: string;
   email!: string;
   transactionCards: Transaction[] = [];
   safesCards: Safe[] = [];
-  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private bankUserService: BankUserService, private fb: FormBuilder,private authService:AuthService) {
+
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private bankUserService: BankUserService, private fb: FormBuilder, private authService: AuthService) {
     this.emailForm = this.fb.group({
       email: ['', Validators.email]
     });
@@ -51,10 +52,10 @@ export class AdminPageComponent {
     const email = this.getEmail();
     if (email) {
       this.bankUserService.getUserByEmail(email).subscribe({
-        next:(data) => {
+        next: (data) => {
           this.user = data;
         },
-        error:(error) =>{
+        error: (error) => {
           console.log(error)
         }
       });
@@ -65,10 +66,10 @@ export class AdminPageComponent {
     const email = this.getEmail();
     if (email) {
       this.bankUserService.getAccountByBankUser(email).subscribe({
-        next:(data) => {
+        next: (data) => {
           this.account = data;
         },
-        error:(error) =>{
+        error: (error) => {
           console.log(error)
         }
       });
@@ -80,19 +81,21 @@ export class AdminPageComponent {
     const iban = this.getIban();
     if (iban) {
       this.accountService.getTransactionsByAccount(iban).subscribe({
-        next: (data) =>{
+        next: (data) => {
           this.transactions = data;
           console.log(data)
-          this.transactionCards = this.transactions.map(transaction => ({
-            sentAmount:transaction.sentAmount,
-            receiverIban: transaction.receiverIban,
-            reason:transaction.reason,
-            creditPayment:transaction.creditPayment,
-            issueDate:transaction.issueDate
-          }));
-          console.log("Tran",this.transactionCards)
-      },
-        error:(error) =>{
+
+          this.transactionCards = this.transactions
+            .map(transaction => ({
+              sentAmount: transaction.sentAmount,
+              receiverIban: transaction.receiverIban,
+              reason: transaction.reason,
+              creditPayment: transaction.creditPayment,
+              issueDate: transaction.issueDate as number
+            }));
+          console.log("Tran", this.transactionCards)
+        },
+        error: (error) => {
           console.log(error)
         }
       });
@@ -104,17 +107,17 @@ export class AdminPageComponent {
     if (iban) {
       this.accountService.getSafesByAccount(iban).subscribe(
         {
-          next: (data)  => {
+          next: (data) => {
             this.safes = data;
             console.log(data)
             this.safesCards = this.safes.map(safe => ({
               name: safe.name,
-              key:safe.key,
-              initialFunds:safe.initialFunds
+              key: safe.key,
+              initialFunds: safe.initialFunds
             }));
             console.log('Mapped Safes:', this.safesCards);
           },
-          error:(error) =>{
+          error: (error) => {
             console.log(error)
           }
         });
@@ -123,30 +126,30 @@ export class AdminPageComponent {
 
   getBankCard() {
     const iban = this.getIban();
-      if (iban) {
-        this.accountService.getCreditCard(iban).subscribe({
-          next:(data) => {
-            this.card = data;
-          },
-          error:(error) =>{
-            console.log(error)
-          }
-        });
-      }
+    if (iban) {
+      this.accountService.getCreditCard(iban).subscribe({
+        next: (data) => {
+          this.card = data;
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      });
     }
+  }
 
 
   getInfoByEmail() {
-     this.getBankUser();
-     this.getAccount();
+    this.getBankUser();
+    this.getAccount();
   }
 
-getInfoByIban(){
-  this.getBankCard();
-  this.getSafes();
-  this.getTransactions();
+  getInfoByIban() {
+    this.getBankCard();
+    this.getSafes();
+    this.getTransactions();
 
-}
+  }
 
 
   logOut() {

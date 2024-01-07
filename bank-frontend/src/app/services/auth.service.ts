@@ -15,7 +15,7 @@ export class AuthService {
   ) {}
 
   login(loginCredentials: LoginRequest): Observable<any>{
-    return this.http.post("http://localhost:8080/user/auth/login", loginCredentials)
+    return this.http.post("http://localhost:8080/user/login", loginCredentials)
       .pipe(
         tap((response: any) => {
           const token = response.token;

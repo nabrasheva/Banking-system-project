@@ -63,4 +63,7 @@ export class AccountService {
   getCreditCard(iban:string) : Observable<any>{
     return this.http.get(`http://localhost:8080/account/${iban}/card`, { headers: this.headers });
   }
+  getAccountByIban(iban:string): Observable<any>{
+    return this.http.get(`http://localhost:8080/account?iban=${iban}`, {headers:this.headers})
+  }
 }

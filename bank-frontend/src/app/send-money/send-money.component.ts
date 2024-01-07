@@ -26,15 +26,26 @@ export class SendMoneyComponent {
   ngOnInit(){
     this.iban = this.dialogData.iban;
     this.sendingForm = this.fb.group({
-      sentAmount: ['', Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')],
-      receiverIban:['', Validators.required],
-      reason: ['', Validators.required]
+      sentAmount: [
+        '',
+        [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)],
+      ],
+      receiverIban: ['', Validators.required],
+      reason: ['', Validators.required],
     })
 
     this.cardForm = this.fb.group({
-      number: ['', Validators.required, Validators.pattern('^[0-9]{12,19}$')],
-      expiryDate:['', Validators.required],
-      cvv: ['', Validators.required, Validators.pattern('^\\d{3,4}$\n')]
+      number: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]{12,19}$')],
+      ],
+      expiryDate: ['', Validators.required],
+      cvv: [
+        '',
+        [
+          Validators.required
+        ],
+      ],
     })
 
     this.accountService.getCreditCard(this.iban).subscribe({
@@ -92,4 +103,5 @@ export class SendMoneyComponent {
       }
     })
   }
+
 }

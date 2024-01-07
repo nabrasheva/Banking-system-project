@@ -20,9 +20,10 @@ export class EnterSafeKeyComponent {
 
   ngOnInit(){
     this.key = this.dialogData.key;
+    console.log(this.key)
 
     this.keyForm = this.fb.group({
-      key: ['', Validators.required]
+      key: ['', [Validators.required]]
     });
   }
 

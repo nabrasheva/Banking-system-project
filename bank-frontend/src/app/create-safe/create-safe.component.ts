@@ -22,9 +22,9 @@ export class CreateSafeComponent {
   ngOnInit(){
     this.iban = this.dialogData.iban;
     this.safeForm = this.fb.group({
-      name: ['', Validators.required],
-      key:['', Validators.required],
-      initialFunds: ['', Validators.min(1), Validators.required]
+      name: ['', [Validators.required]],
+      key:['', [Validators.required]],
+      initialFunds: ['',[ Validators.min(1), Validators.required]]
     })
   }
 

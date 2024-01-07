@@ -27,14 +27,17 @@ export class SafePageComponent {
 
     this.route.params.subscribe(params => {
     this.iban = params['iban'];
+    console.log(this.iban)
     });
 
     this.accountService.getSafesByAccount(this.iban).subscribe({
       next: (data) => {
         this.safes = data;
+        console.log(this.safes)
         this.safes.forEach(safe=>{
           this.dataSource.data.push({name:safe.name});
         })
+        this.dataSource._updateChangeSubscription();
       },
       error: (error) => {
         console.error(error);
@@ -52,38 +55,39 @@ export class SafePageComponent {
   viewSafe(element: SafeRow) {
     let safe = this.findSafeByName(element.name);
     const dialogRef: MatDialogRef<EnterSafeKeyComponent, any> = this.dialog.open(EnterSafeKeyComponent, {
-      data: { key: safe }
+      data: { key: safe?.key }
     });
 
-    let showSafe = false;
+    let showSafe ;
     dialogRef.componentInstance.emitter.subscribe((isAuthenticated: boolean) => {
         showSafe = isAuthenticated;
-      this.dialog.closeAll();
+      if(showSafe)
+      {
+        console.log(showSafe)
+        const dialogRef: MatDialogRef<ShowSafeComponent, any> = this.dialog.open(ShowSafeComponent, {
+          data: { safe: safe , iban: this.iban}
+        });
+
+        dialogRef.componentInstance.emitter.subscribe((name)=>{
+          if(name !== 'none')
+          {
+            const safeRow = this.dataSource.data.find(safeRow => safeRow.name === name);
+            if(safeRow !== undefined)
+            {
+              const index = this.dataSource.data.indexOf(safeRow);
+              if (index !== -1) {
+                this.dataSource.data.splice(index, 1);
+                this.dataSource._updateChangeSubscription();
+              }
+            }
+
+          }
+          this.dialog.closeAll();
+        })
+      }
     });
 
-    if(showSafe)
-    {
-      const dialogRef: MatDialogRef<ShowSafeComponent, any> = this.dialog.open(ShowSafeComponent, {
-        data: { safe: safe , iban: this.iban}
-      });
 
-      dialogRef.componentInstance.emitter.subscribe((name)=>{
-        if(name !== 'none')
-        {
-          const safeRow = this.dataSource.data.find(safeRow => safeRow.name === name);
-          if(safeRow !== undefined)
-          {
-            const index = this.dataSource.data.indexOf(safeRow);
-            if (index !== -1) {
-              this.dataSource.data.splice(index, 1);
-              this.dataSource._updateChangeSubscription();
-            }
-          }
-
-        }
-        this.dialog.closeAll();
-      })
-    }
   }
 
   createSafe() {

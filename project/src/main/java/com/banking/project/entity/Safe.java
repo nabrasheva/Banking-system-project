@@ -28,7 +28,6 @@ public class Safe {
     @Column(name = "initial_funds", nullable = false)
     private BigDecimal initialFunds;
 
-    @CreationTimestamp
     @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 

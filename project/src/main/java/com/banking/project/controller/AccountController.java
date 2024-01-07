@@ -26,8 +26,8 @@ public class AccountController {
 
     @PostMapping("/{iban}/safe")
     @ResponseStatus(value = CREATED)
-    public String createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
-        return "Your safe id is :  " + accountService.createSafeForAccount(iban, safeDto);
+    public SafeDto createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
+        return accountService.createSafeForAccount(iban, safeDto);
     }
 
     @GetMapping(params = "iban")
