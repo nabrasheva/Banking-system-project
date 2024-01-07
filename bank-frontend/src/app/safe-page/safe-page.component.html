@@ -2,10 +2,11 @@
   <mat-toolbar id="header">
     <span id="header_toolbar">Online Banking System</span>
     <span class="spacer"></span>
-    <button mat-fab extended="" color="primary" class="header-btn" ><a [routerLink]="['/welcomePage']">Back</a></button>
-    <button  mat-fab extended="" color="primary" class="header-btn" (click)="logOut()" >Log Out</button>
+    <button mat-fab extended=""  class="header-btn" ><a [routerLink]="['/welcomePage']">Back</a></button>
+    <button  mat-fab extended=""  class="header-btn" (click)="logOut()" >Logout</button>
   </mat-toolbar>
 </p>
+
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

@@ -2,8 +2,9 @@
   <mat-toolbar id="header">
     <span id="header_toolbar">Online Banking System</span>
     <span class="spacer"></span>
-    <button mat-fab extended="" color="primary" class="header-btn" (click)="navigateToProfile()">Profile</button>
-    <button  mat-fab extended="" color="primary" class="header-btn" (click)="logOut()" >Log Out</button>
+    <button mat-fab extended="" color="primary" class="header-btn" (click)="navigateToProfile()">{{'👥'}}</button>
+    <button  mat-fab extended="" color="primary" class="header-btn" (click)="logOut()" >{{'… 🚶‍♀️‍➡️ …'}}</button>
+    <button mat-fab  extended=""  color="primary" class="header-btn" [routerLink]="['../loginAdmin']">{{ '👨‍💻' }}</button>
   </mat-toolbar>
 </p>
 

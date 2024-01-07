@@ -27,7 +27,7 @@ export class ProfilePageComponent {
             this.user_email = params['user_email'];
         });
 
-      this.userService.getBankUserByEmail(this.user_email).subscribe({
+      this.userService.getUserByEmail(this.user_email).subscribe({
         next: value => {
           this.user = value;
         },

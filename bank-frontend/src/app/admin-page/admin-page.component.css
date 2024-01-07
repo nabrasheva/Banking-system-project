@@ -1,0 +1,60 @@
+/*.main-part{*/
+/*  margin: 10%;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: center;*/
+/*}*/
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header-btn {
+  margin: 10px;
+  cursor: pointer;
+  background-color: white;
+  color: #182B3A;/* Add this to make the text cursor on hover */
+}
+#header {
+  background: linear-gradient(90deg,  lightblue, #717676);
+  display: flex;
+  justify-content: space-between; /* Align items horizontally */
+  padding: 10px; /* Adjust padding for better appearance */
+}
+
+#header_toolbar {
+  font-size: 20px; /* Adjust font size if needed */
+}
+.cards-container {
+  display: flex;
+  flex-direction: column; /* Change to column */
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 49%; /* Adjust as needed, leaving some space for margins/padding */
+  margin-bottom: 2%;
+
+}
+
+.card {
+  width: 100%;
+  background: linear-gradient(90deg,  white,lightblue)
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 2%;
+}
+
+.user-info,
+.account-info,
+.card-info {
+  width: 100%; /* Adjust as needed */
+}

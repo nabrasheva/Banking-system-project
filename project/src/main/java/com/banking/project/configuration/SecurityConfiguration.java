@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/auth/login", "/user/auth/registration").permitAll()
                         .requestMatchers("/safe/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/account/**").hasAnyAuthority("USER")
+                        .requestMatchers("/user/**","/account/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

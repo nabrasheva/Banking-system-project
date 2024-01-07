@@ -1,19 +1,50 @@
 .spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .header-btn {
-    margin: 10px;
-    cursor: pointer; /* Add this to make the text cursor on hover */
+  margin: 10px;
+  cursor: pointer;
+  background-color: white;
+  color: #182B3A;/* Add this to make the text cursor on hover */
 }
-
 #header {
-    background: darkorange;
-    display: flex;
-    justify-content: space-between; /* Align items horizontally */
-    padding: 10px; /* Adjust padding for better appearance */
+  background: linear-gradient(90deg,  lightblue, #717676);
+  display: flex;
+  justify-content: space-between; /* Align items horizontally */
+  padding: 10px; /* Adjust padding for better appearance */
 }
 
 #header_toolbar {
-    font-size: 20px; /* Adjust font size if needed */
+  font-size: 20px; /* Adjust font size if needed */
+}
+.mat-elevation-z8 {
+  width: 100%;
+  border-collapse: separate;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgb(184, 0, 253);
+
+}
+
+.mat-elevation-z8 caption {
+  font-family: "Arial Black", sans-serif;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.mat-elevation-z8 th, .mat-elevation-z8 td {
+  padding: 8px;
+  border-radius: 2em;
+
+}
+button{
+  margin-top: 15px;
+  box-shadow: 0 4px 8px rgba(184, 0, 253, 0.44);
+  transition: transform 0.3s ease;
+}
+button:hover{
+  color: aqua;
+  transform: translateY(-2px);
+
 }

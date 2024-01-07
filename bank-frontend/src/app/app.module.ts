@@ -7,8 +7,8 @@ import { SignupComponent } from './signup/signup.component';
 import {MaterialUiModule} from "./material-ui/material-ui.module";
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { SafePageComponent } from './safe-page/safe-page.component';
-import { LoginUserComponent } from './login-user/login-user.component';
-import { LoginAdminComponent } from './login-admin/login-admin.component';
+import { LoginUserComponent } from './login/login-user/login-user.component';
+import { LoginAdminComponent } from './login/login-admin/login-admin.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { InfoPageComponent } from './info-page/info-page.component';
 import { EnterSafeKeyComponent } from './enter-safe-key/enter-safe-key.component';
@@ -25,6 +25,8 @@ import { AccountPageComponent } from './account-page/account-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdminPageComponent } from './admin-page/admin-page.component';
+
 
 @NgModule({
   declarations: [
@@ -45,8 +47,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TakeLoanComponent,
     ReturnLoanComponent,
     AccountPageComponent,
+    AdminPageComponent,
     ProfilePageComponent,
-    UpdateBankUserComponent
+    UpdateBankUserComponent,
   ],
   imports: [
     BrowserModule,

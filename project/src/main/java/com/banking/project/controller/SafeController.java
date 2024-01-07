@@ -14,6 +14,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RequestMapping("/safe")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class SafeController {
     private final SafeService safeService;
 
