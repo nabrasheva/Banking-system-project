@@ -16,6 +16,7 @@ public class SecurityAuthList {
 
     public static final String[] USER_LIST = {
             "/user/**",
-            "/account/**"
+            "/account/**",
+            "/safe"
     };
 }
