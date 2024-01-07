@@ -1,9 +1,6 @@
 package com.banking.project.controller;
 
-import com.banking.project.dto.BankUserDto;
-import com.banking.project.dto.LoginRequest;
-import com.banking.project.dto.LoginResponse;
-import com.banking.project.dto.UpdateBankUserDto;
+import com.banking.project.dto.*;
 import com.banking.project.service.BankUserService;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
@@ -22,14 +19,14 @@ import static org.springframework.http.HttpStatus.*;
 public class BankUserController {
     private final BankUserService bankUserService;
 
-    @PostMapping("auth/registration")
+    @PostMapping("/registration")
     @ResponseStatus(value = CREATED)
     public String createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
-        bankUserService.createBankUser(bankUserDto);
+        bankUserService.registration(bankUserDto);
         return "User created successfully";
     }
 
-    @PostMapping("auth/login")
+    @PostMapping("/login")
     @ResponseStatus(value = OK)
     public LoginResponse login(@RequestBody @Valid final LoginRequest loginRequest) {
         return bankUserService.login(loginRequest);
@@ -52,5 +49,17 @@ public class BankUserController {
     @ResponseStatus(value = NO_CONTENT)
     public void updateUser(@PathVariable final String email, @RequestBody final UpdateBankUserDto bankUser) {
         bankUserService.updateUsernameAndPassword(email, bankUser);
+    }
+
+    @GetMapping(value = "/account",params = "email")
+    @ResponseStatus(value = OK)
+    public AccountDto getAccountByEmail(@RequestParam final String email) {
+        return bankUserService.getAccountByEmail(email);
+    }
+
+    @PostMapping(value = "/create-admin")
+    @ResponseStatus(value = CREATED)
+    public void createAdmin(@RequestBody @Valid final BankUserDto bankUserDto) {
+        bankUserService.createAdmin(bankUserDto);
     }
 }

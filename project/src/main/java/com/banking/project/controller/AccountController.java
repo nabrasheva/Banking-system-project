@@ -65,22 +65,23 @@ public class AccountController {
     public void updateAccountSafe(@PathVariable final String iban, @RequestParam final String name, @RequestParam final BigDecimal funds) {
         accountService.updateSafe(iban, name, funds);
     }
+
     @PostMapping("/{iban}/transaction")
     @ResponseStatus(value = CREATED)
-    public void sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
-        accountService.sendMoney(iban, transactionDto);
+    public TransactionDto sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
+        return accountService.sendMoney(iban, transactionDto);
     }
 
     @PostMapping("/take-loan")
     @ResponseStatus(value = CREATED)
-    public void takeLoan(@RequestBody final LoanDto loanDto) {
-        accountService.takeLoan(loanDto);
+    public TransactionDto takeLoan(@RequestBody final LoanDto loanDto) {
+        return accountService.takeLoan(loanDto);
     }
 
     @PostMapping("/return-loan")
     @ResponseStatus(value = CREATED)
-    public void returnLoan(@RequestBody final LoanDto loanDto) {
-        accountService.returnLoan(loanDto);
+    public TransactionDto returnLoan(@RequestBody final LoanDto loanDto) {
+        return accountService.returnLoan(loanDto);
     }
 
 

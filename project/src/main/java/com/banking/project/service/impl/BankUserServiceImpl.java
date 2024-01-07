@@ -1,9 +1,6 @@
 package com.banking.project.service.impl;
 
-import com.banking.project.dto.BankUserDto;
-import com.banking.project.dto.LoginRequest;
-import com.banking.project.dto.LoginResponse;
-import com.banking.project.dto.UpdateBankUserDto;
+import com.banking.project.dto.*;
 import com.banking.project.entity.Account;
 import com.banking.project.entity.BankUser;
 import com.banking.project.entity.DebitCard;
@@ -51,7 +48,7 @@ public class BankUserServiceImpl implements BankUserService {
     private final JwtService jwtService;
 
     @Override
-    public void createBankUser(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+    public void registration(final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
         }
@@ -65,7 +62,7 @@ public class BankUserServiceImpl implements BankUserService {
         }
         final DebitCard debitCard = DebitCard.builder().cvv(CVVGenerator.generateCVV()).expiryDate(LocalDate.now().plusYears(3)).number(number).build();
 
-        final Account account = Account.builder().availableAmount(BigDecimal.valueOf(0)).iban(iban).debitCard(debitCard).build();
+        final Account account = Account.builder().availableAmount(BigDecimal.valueOf(0)).iban(iban).debitCard(debitCard).creditAmount(BigDecimal.valueOf(0)).build();
 
         final BankUser user = BankUser.builder().email(bankUserDto.getEmail())
                 .country(bankUserDto.getCountry())
@@ -96,6 +93,7 @@ public class BankUserServiceImpl implements BankUserService {
     @Override
     public void updateUsernameAndPassword(final String email, final UpdateBankUserDto bankUser) {
         final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+
 
         if(!bankUser.getUsername().isBlank())
         {
@@ -129,6 +127,29 @@ public class BankUserServiceImpl implements BankUserService {
             throw new BadCredentialsException("Bad credentials");
         }
 
+    }
+
+    @Override
+    public AccountDto getAccountByEmail(final String email) {
+        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(()-> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return modelMapper.map(user.getAccount(),AccountDto.class);
+    }
+
+    @Override
+    public void createAdmin(final BankUserDto bankUserDto) {
+        if (bankUserRepository.exists(BankUserSpecification.emailLike(bankUserDto.getEmail()))) {
+            throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
+        }
+        final BankUser user = BankUser.builder()
+                .email(bankUserDto.getEmail())
+                .country(bankUserDto.getCountry())
+                .username(bankUserDto.getUsername())
+                .password(passwordEncoder.encode(bankUserDto.getPassword()))
+                .role(UserRole.ADMIN)
+                .account(null)
+                .build();
+
+        bankUserRepository.save(user);
     }
 
 

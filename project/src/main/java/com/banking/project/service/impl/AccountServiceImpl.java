@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -131,6 +132,7 @@ public class AccountServiceImpl implements AccountService {
         if (transactions.isEmpty()) {
             throw new TransactionNotFoundException(TRANSACTION_NOT_FOUND_MESSAGE);
         }
+
         return transactions.stream()
                 .map(transaction -> mapper.map(transaction, TransactionDto.class))
                 .toList();
@@ -151,7 +153,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public void sendMoney(final String senderIban, final TransactionDto transactionDto) {
+    public TransactionDto sendMoney(final String senderIban, final TransactionDto transactionDto) {
         final BigDecimal amount = transactionDto.getSentAmount();
         final String receiverIban = transactionDto.getReceiverIban();
 
@@ -170,17 +172,20 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(accountReceiver);
         }
 
-        accountSender.getAvailableAmount().subtract(amount);
 
         final Transaction transaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
         accountSender.getTransactions().add(transaction);
 
+        BigDecimal reduceAmount = autoTransaction(accountSender,amount);
+        accountSender.setAvailableAmount(accountSender.getAvailableAmount().subtract(reduceAmount));
+
         accountRepository.save(accountSender);
 
+        return  mapper.map(transaction,TransactionDto.class);
     }
 
     @Override
-    public void takeLoan(final LoanDto loanDto) {
+    public TransactionDto takeLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -195,11 +200,11 @@ public class AccountServiceImpl implements AccountService {
         account.getTransactions().add(transaction);
 
         accountRepository.save(account);
-
+        return  mapper.map(transaction,TransactionDto.class);
     }
 
     @Override
-    public void returnLoan(final LoanDto loanDto) {
+    public TransactionDto returnLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -227,6 +232,7 @@ public class AccountServiceImpl implements AccountService {
         account.getTransactions().add(transaction);
 
         accountRepository.save(account);
+        return  mapper.map(transaction,TransactionDto.class);
     }
 
     @Override
@@ -258,4 +264,11 @@ public class AccountServiceImpl implements AccountService {
         safeService.saveSafe(safe);
 
     }
+
+    private BigDecimal autoTransaction(Account account, BigDecimal amount) {
+        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(1)).reason("Transaction tax").issueDate(LocalDateTime.now()).build();
+        account.getTransactions().add(autoTransaction);
+        return amount.add(autoTransaction.getSentAmount());
+    }
+
 }
