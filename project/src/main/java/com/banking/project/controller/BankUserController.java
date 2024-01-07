@@ -52,7 +52,7 @@ public class BankUserController {
 
     @GetMapping(value = "/account",params = "email")
     @ResponseStatus(value = OK)
-    public AccountDto accountDto(@RequestParam final String email) {
+    public AccountDto getAccountByEmail(@RequestParam final String email) {
         return bankUserService.getAccountByEmail(email);
     }
 
