@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import static com.banking.project.constant.SecurityAuthList.*;
 
@@ -22,14 +23,18 @@ import static com.banking.project.constant.SecurityAuthList.*;
 public class SecurityConfiguration {
     private final JwtTokenFilter jwtTokenFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity.
-                csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
+                csrf(AbstractHttpConfigurer::disable)
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource))
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, ADMIN_LIST).hasAnyAuthority("ADMIN", "USER")
                         .requestMatchers(HttpMethod.POST, "/user/create-admin").hasAnyAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,"/user/**").hasAnyAuthority("USER")
                         .requestMatchers(HttpMethod.DELETE, "/user/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(USER_LIST).hasAnyAuthority("USER")
                         .anyRequest().authenticated())

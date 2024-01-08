@@ -64,7 +64,7 @@ export class TransactionsPageComponent {
       if (transaction.issueDate !== undefined) {
         this.dataSource.data.push({
           sentAmount: transaction.sentAmount,
-          receiverIban: 'none',
+          receiverIban: transaction.receiverIban,
           reason: transaction.reason,
           issueDate: new Date(transaction.issueDate)
         });

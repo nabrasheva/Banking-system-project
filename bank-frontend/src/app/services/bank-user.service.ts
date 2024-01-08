@@ -24,7 +24,7 @@ export class BankUserService {
   }
 
   updateUserByEmail(email:string, user:UpdateBankUser): Observable<any>{
-    return this.http.patch(`http://localhost:8080/user?email=${email}`,user, { headers: this.headers });
+    return this.http.patch(`http://localhost:8080/user/${email}`,user, { headers: this.headers });
 
   }
 }
