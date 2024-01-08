@@ -21,9 +21,8 @@ public class BankUserController {
 
     @PostMapping("/registration")
     @ResponseStatus(value = CREATED)
-    public String createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+    public void createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         bankUserService.registration(bankUserDto);
-        return "User created successfully";
     }
 
     @PostMapping("/login")

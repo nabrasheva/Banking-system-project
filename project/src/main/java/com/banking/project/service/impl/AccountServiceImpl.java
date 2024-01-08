@@ -21,13 +21,13 @@ import com.banking.project.service.DebitCardService;
 import com.banking.project.service.SafeService;
 import com.banking.project.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -154,7 +154,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public TransactionDto  sendMoney(final String senderIban, final TransactionDto transactionDto) {
+    public List<TransactionDto> sendMoney(final String senderIban, final TransactionDto transactionDto) {
         final BigDecimal amount = transactionDto.getSentAmount();
         final String receiverIban = transactionDto.getReceiverIban();
 
@@ -174,19 +174,24 @@ public class AccountServiceImpl implements AccountService {
         }
 
 
-        final Transaction transaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
-        accountSender.getTransactions().add(transaction);
+        final Transaction userTransaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
+        accountSender.getTransactions().add(userTransaction);
 
-        BigDecimal reduceAmount = autoTransaction(accountSender,amount);
+        Transaction autoTransaction = autoTransaction(accountSender);
+        BigDecimal reduceAmount = amount.subtract(autoTransaction.getSentAmount());
         accountSender.setAvailableAmount(accountSender.getAvailableAmount().subtract(reduceAmount));
 
         accountRepository.save(accountSender);
 
-        return  mapper.map(transaction,TransactionDto.class);
+        final List<Transaction> transactions = List.of(userTransaction, autoTransaction);
+
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
     }
 
     @Override
-    public TransactionDto takeLoan(final LoanDto loanDto) {
+    public List<TransactionDto> takeLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -194,19 +199,27 @@ public class AccountServiceImpl implements AccountService {
         }
         final Account account = accountRepository.findAccountByIban(loanDto.getUserIban()).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
+
+        final Transaction userTransaction = Transaction.builder().sentAmount(amount).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
+        account.getTransactions().add(userTransaction);
+
+        Transaction loanTransaction = loanTax(account);
+
         account.setCreditAmount(account.getCreditAmount().add(amount));
-        account.setAvailableAmount(account.getAvailableAmount().add(amount));
-
-        final Transaction transaction = Transaction.builder().sentAmount(amount).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
-        account.getTransactions().add(transaction);
-
+        BigDecimal availableAmount = amount.add(loanTransaction.getSentAmount());
+        account.setAvailableAmount(account.getAvailableAmount().add(availableAmount));
 
         accountRepository.save(account);
-        return  mapper.map(transaction,TransactionDto.class);
+
+        List<Transaction> transactions = List.of(userTransaction, loanTransaction);
+
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
     }
 
     @Override
-    public TransactionDto returnLoan(final LoanDto loanDto) {
+    public List<TransactionDto> returnLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -228,13 +241,23 @@ public class AccountServiceImpl implements AccountService {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
-        account.setAvailableAmount(account.getAvailableAmount().subtract(amount));
-        account.setCreditAmount(account.getCreditAmount().subtract(amount));
-        final Transaction transaction = Transaction.builder().sentAmount(amount.negate()).reason("Returning a loan").issueDate(LocalDateTime.now()).creditPayment(true).build();
-        account.getTransactions().add(transaction);
 
+        final Transaction userTransaction = Transaction.builder().sentAmount(amount.negate()).reason("Returning a loan").issueDate(LocalDateTime.now()).creditPayment(true).build();
+        account.getTransactions().add(userTransaction);
+
+        Transaction loanTransaction = loanTax(account);
+
+        BigDecimal reduceAmount = amount.subtract(loanTransaction.getSentAmount());
+        account.setAvailableAmount(account.getAvailableAmount().subtract(reduceAmount));
+
+        account.setCreditAmount(account.getCreditAmount().subtract(amount));
         accountRepository.save(account);
-        return  mapper.map(transaction,TransactionDto.class);
+
+        List<Transaction> transactions = List.of(userTransaction, loanTransaction);
+
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
     }
 
     @Override
@@ -267,10 +290,16 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
-    private BigDecimal autoTransaction(Account account, BigDecimal amount) {
-        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(1)).reason("Transaction tax").issueDate(LocalDateTime.now()).build();
+    private Transaction autoTransaction(Account account) {
+        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(1).negate()).reason("Transaction tax").issueDate(LocalDateTime.now()).build();
         account.getTransactions().add(autoTransaction);
-        return amount.add(autoTransaction.getSentAmount());
+        return autoTransaction;
+    }
+
+    private Transaction loanTax(Account account) {
+        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(10).negate()).reason("Loan transaction tax").issueDate(LocalDateTime.now()).build();
+        account.getTransactions().add(autoTransaction);
+        return autoTransaction;
     }
 
 }

@@ -45,8 +45,6 @@
       <br>
       <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 
-      <app-info-page *ngIf="isInfoMessage" [infoMessage]="infoMessage" (closeModal)="closeModal()"></app-info-page>
-
     </form>
     <br>
     <p>Already have an account? <a [routerLink]="['../login']">Login</a></p>

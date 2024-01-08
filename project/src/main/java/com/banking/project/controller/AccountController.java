@@ -68,19 +68,19 @@ public class AccountController {
 
     @PostMapping("/{iban}/transaction")
     @ResponseStatus(value = CREATED)
-    public TransactionDto sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
+    public List<TransactionDto> sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
         return accountService.sendMoney(iban, transactionDto);
     }
 
     @PostMapping("/take-loan")
     @ResponseStatus(value = CREATED)
-    public TransactionDto takeLoan(@RequestBody final LoanDto loanDto) {
+    public List<TransactionDto> takeLoan(@RequestBody final LoanDto loanDto) {
         return accountService.takeLoan(loanDto);
     }
 
     @PostMapping("/return-loan")
     @ResponseStatus(value = CREATED)
-    public TransactionDto returnLoan(@RequestBody final LoanDto loanDto) {
+    public List<TransactionDto> returnLoan(@RequestBody final LoanDto loanDto) {
         return accountService.returnLoan(loanDto);
     }
 

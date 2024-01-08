@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {SignupService} from "../services/signup.service";
 
 @Component({
   selector: 'app-signup',
@@ -18,15 +19,15 @@ export class SignupComponent {
 
   constructor(
     private fb: FormBuilder,
-   // private signupService: SignupService,
+   private signupService: SignupService,
     private router: Router
   ) {
     this.signupForm = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', Validators.email],
-      password: ['', Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')],
-      confirmPassword: ['', Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')],
-      country: ['', Validators.required]
+      username: ['', [Validators.required]],
+      email: ['', [Validators.email]],
+      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')]],
+      confirmPassword: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')]],
+      country: ['', [Validators.required]]
     })
   }
 
@@ -45,24 +46,23 @@ export class SignupComponent {
       return;
     }
 
-    // this.signupService.signup(this.signupForm.value).subscribe({
-    //   next: (value) => {
-    // !!ADD EMAIL AND TOKEN!!
-    //     this.showInfo('Registration was successful');
-    //   },
-    //   error: err => {
-    //     this.errorMessage = 'An error occurred during signup';
-    //   }
-    // });
+    this.signupService.signup(this.signupForm.value).subscribe({
+      next: () => {
+        this.router.navigate(['login']);
+      },
+      error: () => {
+        this.errorMessage = 'An error occurred during signup';
+      }
+    });
   }
 
-  public showInfo(message:string): void {
-    this.isInfoMessage = true;
-    this.infoMessage = message;
-  }
-
-  public closeModal(): void {
-    this.isInfoMessage = false;
-    this.infoMessage = '';
-  }
+  // public showInfo(message:string): void {
+  //   this.isInfoMessage = true;
+  //   this.infoMessage = message;
+  // }
+  //
+  // public closeModal(): void {
+  //   this.isInfoMessage = false;
+  //   this.infoMessage = '';
+  // }
 }

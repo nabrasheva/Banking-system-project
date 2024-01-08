@@ -17,7 +17,7 @@ import {AuthService} from "../services/auth.service";
   styleUrl: './transactions-page.component.css'
 })
 export class TransactionsPageComponent {
-  displayedColumns: string[] = ['sentAmount', 'receiverIban', 'reason','issueDate'];
+  displayedColumns: string[] = ['sentAmount', 'receiverIban', 'reason', 'issueDate'];
   transactions!: Transaction[];
   dataSource: MatTableDataSource<TransactionRow> = new MatTableDataSource();
   iban!: string;
@@ -58,19 +58,8 @@ export class TransactionsPageComponent {
       data: {iban: this.iban}
     });
 
-    dialogRef.componentInstance.emitter.subscribe((transaction: Transaction) => {
-      console.log(transaction)
-
-      if (transaction.issueDate !== undefined) {
-        this.dataSource.data.push({
-          sentAmount: transaction.sentAmount,
-          receiverIban: transaction.receiverIban,
-          reason: transaction.reason,
-          issueDate: new Date(transaction.issueDate)
-        });
-      }
-      this.dataSource._updateChangeSubscription();
-      this.dialog.closeAll();
+    dialogRef.componentInstance.emitter.subscribe((transactions: Transaction[]) => {
+    this.handleTransactions(transactions);
     });
   }
 
@@ -79,19 +68,8 @@ export class TransactionsPageComponent {
       data: {iban: this.iban}
     });
 
-    dialogRef.componentInstance.emitter.subscribe((transaction: Transaction) => {
-      console.log(transaction)
-
-      if (transaction.issueDate !== undefined) {
-        this.dataSource.data.push({
-          sentAmount: transaction.sentAmount,
-          receiverIban: 'none',
-          reason: transaction.reason,
-          issueDate: new Date(transaction.issueDate)
-        });
-      }
-      this.dataSource._updateChangeSubscription();
-      this.dialog.closeAll();
+    dialogRef.componentInstance.emitter.subscribe((transactions: Transaction[]) => {
+     this.handleTransactions(transactions);
     });
   }
 
@@ -100,23 +78,27 @@ export class TransactionsPageComponent {
       data: {iban: this.iban}
     });
 
-    dialogRef.componentInstance.emitter.subscribe((transaction: Transaction) => {
-      console.log(transaction)
-
-      if (transaction.issueDate !== undefined) {
-        this.dataSource.data.push({
-          sentAmount: transaction.sentAmount,
-          receiverIban: 'none',
-          reason: transaction.reason,
-          issueDate: new Date(transaction.issueDate)
-        });
-      }
-      this.dataSource._updateChangeSubscription();
-      this.dialog.closeAll();
+    dialogRef.componentInstance.emitter.subscribe((transactions: Transaction[]) => {
+      this.handleTransactions(transactions);
     });
   }
 
   logOut() {
     this.authService.logout();
+  }
+
+  private handleTransactions(transactions: Transaction[]) {
+    transactions.forEach(transaction => {
+      if (transaction.issueDate !== undefined) {
+        this.dataSource.data.push({
+          sentAmount: transaction.sentAmount,
+          receiverIban: transaction.receiverIban,
+          reason: transaction.reason,
+          issueDate: new Date(transaction.issueDate)
+        });
+      }
+    });
+    this.dataSource._updateChangeSubscription();
+    this.dialog.closeAll();
   }
 }
