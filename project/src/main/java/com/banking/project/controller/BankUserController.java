@@ -5,6 +5,7 @@ import com.banking.project.service.BankUserService;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +61,11 @@ public class BankUserController {
     @ResponseStatus(value = CREATED)
     public void createAdmin(@RequestBody @Valid final BankUserDto bankUserDto) {
         bankUserService.createAdmin(bankUserDto);
+    }
+
+    @PatchMapping(value = "/recover")
+    @ResponseStatus(value = NO_CONTENT)
+    public void recoverPassword(@RequestParam String email ) throws MailjetSocketTimeoutException, MailjetException {
+        bankUserService.recoverPassword(email);
     }
 }

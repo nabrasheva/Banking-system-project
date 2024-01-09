@@ -27,7 +27,7 @@ export class UpdateBankUserComponent {
     this.user_email = this.dialogData.user_email;
     this.userForm = this.fb.group({
       username: [''],
-      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{3,30}$')]]
+      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z]).{3,30}$')]]
     });
   }
   updateUser() {

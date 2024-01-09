@@ -7,7 +7,9 @@ public class EmailSenderConstant {
     public static final String SENDER_EMAIL = "annargeorgieva21@gmail.com";
     public static final String SENDER_NAME = "Banking system";
 
-    private EmailSenderConstant() throws IllegalAccessException {
-        throw new IllegalAccessException(NON_INSTANTIABLE_CLASS_MESSAGE);
+    public  static final String LOGIN_URL = "http://localhost:4200/login";
+
+    private EmailSenderConstant() {
+        throw new IllegalStateException(NON_INSTANTIABLE_CLASS_MESSAGE);
     }
 }

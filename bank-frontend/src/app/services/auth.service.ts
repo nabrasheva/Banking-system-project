@@ -54,4 +54,8 @@ export class AuthService {
     this.router.navigate(['/loginAdmin']).then(r=>r);
   }
 
+  recoverPassword(email:string){
+    return this.http.patch(`http://localhost:8080/user/recover?email=${email}`,{});
+  }
+
 }

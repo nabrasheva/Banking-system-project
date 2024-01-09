@@ -24,5 +24,10 @@
     <br>
     <p>Don't have an account? <a [routerLink]="['../signup']">Sign up</a></p>
     <p>You are an administrator? <a [routerLink]="['../loginAdmin']">Go to Admin login</a></p>
+    <p>Forget password? <a (click)="recoverPassword()" >Recover your password</a></p>
   </mat-card>
+</div>
+
+<div *ngIf="isInfoMessage" class="info-message">
+  {{ infoMessage }}
 </div>

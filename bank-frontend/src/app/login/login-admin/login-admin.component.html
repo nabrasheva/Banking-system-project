@@ -22,5 +22,10 @@
       <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
     </form>
     <br>
+    <p>Forget password? <a (click)="recoverPassword()" >Recover your password</a></p>
   </mat-card>
+</div>
+
+<div *ngIf="isInfoMessage" class="info-message">
+  {{ infoMessage }}
 </div>

@@ -27,6 +27,7 @@ import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.com
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { CreateAdminComponent } from './create-admin/create-admin.component';
     ProfilePageComponent,
     UpdateBankUserComponent,
     CreateAdminComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

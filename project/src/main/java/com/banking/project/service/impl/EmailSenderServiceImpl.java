@@ -13,8 +13,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.banking.project.constant.EmailSenderConstant.SENDER_EMAIL;
-import static com.banking.project.constant.EmailSenderConstant.SENDER_NAME;
+import static com.banking.project.constant.EmailSenderConstant.*;
 
 @Service
 public class EmailSenderServiceImpl implements EmailSenderService {
@@ -32,7 +31,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     public void sendRegistrationConfirmationEmail(final BankUser user, String iban, String number) throws MailjetSocketTimeoutException, MailjetException {
         final String recipientEmail = user.getEmail();
         final String recipientName = user.getUsername();
-        String loginUrl = "http://localhost:4200/login";
+
 
         final MailjetClient client;
         final MailjetRequest request;
@@ -54,7 +53,38 @@ public class EmailSenderServiceImpl implements EmailSenderService {
                                                 ",</h3><p>You have successfully registered. " + "</p>" +
                                                 "<p>Your IBAN is: " + iban + "</p>" +
                                                 "<p>Your debit card number is: " + number + "</p>" +
-                                                "<p>You can use this <a href='" + loginUrl + "'>link to login</a>.</p>")
+                                                "<p>You can use this <a href='" + LOGIN_URL + "'>link to login</a>.</p>")
+                        ));
+
+        client.post(request);
+    }
+
+    @Override
+    public void sendPasswordConfirmationEmail(BankUser user, String password) throws MailjetSocketTimeoutException, MailjetException {
+        String recipientEmail = user.getEmail();
+        String recipientName = user.getUsername() ;
+
+        MailjetClient client;
+        MailjetRequest request;
+
+        client = new MailjetClient(apiKey, secretKey, new ClientOptions("v3.1"));
+        request = new MailjetRequest(Emailv31.resource)
+                .property(Emailv31.MESSAGES, new JSONArray()
+                        .put(new JSONObject()
+                                .put(Emailv31.Message.FROM, new JSONObject()
+                                        .put("Email", SENDER_EMAIL)
+                                        .put("Name", SENDER_NAME))
+                                .put(Emailv31.Message.TO, new JSONArray()
+                                        .put(new JSONObject()
+                                                .put("Email", recipientEmail)
+                                                .put("Name", recipientName)))
+                                .put(Emailv31.Message.SUBJECT, "Your password recovery confirmation")
+                                .put(Emailv31.Message.HTMLPART,
+                                        "<h3>Dear " + recipientName +
+                                                ",</h3><p>You successfully changed your password. Here is your new temporary password: <strong>" +
+                                                password + "</strong></p>" +
+                                                "<p> Please change it from your profile page! </p>" +
+                                                "<p>You can use this <a href='" + LOGIN_URL + "'>link to login</a>.</p>")
                         ));
 
         client.post(request);

@@ -6,10 +6,11 @@
   margin: 10px;
   cursor: pointer;
   background-color: white;
-  color: #182B3A;/* Add this to make the text cursor on hover */
+  color: #182B3A; /* Add this to make the text cursor on hover */
 }
+
 #header {
-  background: linear-gradient(90deg,  lightblue, #717676);
+  background: linear-gradient(90deg, lightblue, #717676);
   display: flex;
   justify-content: space-between; /* Align items horizontally */
   padding: 10px; /* Adjust padding for better appearance */
@@ -19,14 +20,23 @@
   font-size: 20px; /* Adjust font size if needed */
 }
 
+.account-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+}
+
+
 .example-card {
-    max-width: 400px;
-    margin-bottom: 4px;
+  width: 400px;
+  margin: 10px;
+  background: linear-gradient(90deg, white, lightblue);
 }
 
 .account_info {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 50vh;
 }

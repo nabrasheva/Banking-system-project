@@ -1,9 +1,16 @@
 package com.banking.project.constant;
 
+import static com.banking.project.constant.ExceptionMessages.NON_INSTANTIABLE_CLASS_MESSAGE;
+
 public class SecurityAuthList {
+
+    private SecurityAuthList(){
+        throw new IllegalStateException(NON_INSTANTIABLE_CLASS_MESSAGE);
+    }
     public static final String[] AUTH_LIST = {
             "/user/login",
-            "/user/registration"
+            "/user/registration",
+            "/user/recover"
     };
 
     public static final String LOGOUT_URL = "/logout";

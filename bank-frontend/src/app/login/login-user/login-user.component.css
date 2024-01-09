@@ -44,3 +44,19 @@ form {
 .error-message{
   color: red;
 }
+
+.info-message {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 15px;
+  width: 50%;
+  border: 1px solid #d6e9c6;
+  border-radius: 0;
+}

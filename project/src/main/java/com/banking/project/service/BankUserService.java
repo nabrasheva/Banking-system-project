@@ -19,4 +19,6 @@ public interface BankUserService {
 
     void createAdmin(BankUserDto bankUserDto);
 
+    void recoverPassword(String email) throws MailjetSocketTimeoutException, MailjetException;
+
 }

@@ -3,10 +3,12 @@ package com.banking.project.utils;
 import java.math.BigInteger;
 import java.util.Random;
 
+import static com.banking.project.constant.ExceptionMessages.NON_INSTANTIABLE_CLASS_MESSAGE;
+
 public class IbanGenerator {
     private IbanGenerator()
     {
-        throw new IllegalStateException("Cannot instantiate IbanGenerator");
+        throw new IllegalStateException(NON_INSTANTIABLE_CLASS_MESSAGE);
     }
     public static String generateIban(final String country) {
         final int bbanLength = 20;
