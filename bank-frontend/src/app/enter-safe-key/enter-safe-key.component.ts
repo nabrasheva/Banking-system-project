@@ -31,7 +31,9 @@ export class EnterSafeKeyComponent {
     if(!this.keyForm.valid){
       return;
     }
-    if(this.keyForm.get('key')?.value === this.key)
+    let key:string = this.keyForm.get('key')?.value;
+    key = key.trim();
+    if(key === this.key)
     {
       this.emitter.emit(true);
     }

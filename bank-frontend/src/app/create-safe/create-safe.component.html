@@ -7,7 +7,7 @@
 
 
   <mat-form-field>
-    <mat-label>Description</mat-label>
+    <mat-label>Key</mat-label>
     <textarea matInput id="key" formControlName="key"></textarea>
     <mat-error *ngIf="this.safeForm.get('key')?.hasError('required')">Key is required</mat-error>
 

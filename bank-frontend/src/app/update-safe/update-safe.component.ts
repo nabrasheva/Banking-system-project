@@ -25,7 +25,7 @@ export class UpdateSafeComponent {
     this.iban = this.dialogData.iban;
     this.name = this.dialogData.name;
     this.moneyForm = this.fb.group({
-      money: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
+      money: ['', [Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')]]
     });
   }
 
@@ -50,7 +50,7 @@ export class UpdateSafeComponent {
       },
       error: err => {
         console.log(err);
-        this.showError(err);
+        this.showError(err.error.error);
       }
     });
 

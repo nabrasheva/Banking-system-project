@@ -25,8 +25,8 @@ export class SignupComponent {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.email]],
-      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')]],
-      confirmPassword: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')]],
+      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{3,30}$')]],
+      confirmPassword: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{3,30}$')]],
       country: ['', [Validators.required]]
     })
   }
@@ -50,8 +50,8 @@ export class SignupComponent {
       next: () => {
         this.router.navigate(['login']);
       },
-      error: () => {
-        this.errorMessage = 'An error occurred during signup';
+      error: (err) => {
+        this.errorMessage = err.error.error;
       }
     });
   }

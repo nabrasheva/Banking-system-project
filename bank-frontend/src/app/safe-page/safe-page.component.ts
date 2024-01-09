@@ -9,6 +9,7 @@ import {EnterSafeKeyComponent} from "../enter-safe-key/enter-safe-key.component"
 import {ShowSafeComponent} from "../show-safe/show-safe.component";
 import {CreateSafeComponent} from "../create-safe/create-safe.component";
 import {AuthService} from "../services/auth.service";
+import {ShowSafeRow} from "../model/show-safe-row";
 
 @Component({
   selector: 'app-safe-page',
@@ -17,7 +18,7 @@ import {AuthService} from "../services/auth.service";
 })
 export class SafePageComponent {
   displayedColumns: string[] = ['name', 'button'];
-  safes!: Safe[];
+  safes: Safe[] =[];
   dataSource: MatTableDataSource<SafeRow> = new MatTableDataSource();
   iban!:string;
 
@@ -64,11 +65,11 @@ export class SafePageComponent {
       if(showSafe)
       {
         console.log(showSafe)
-        const dialogRef: MatDialogRef<ShowSafeComponent, any> = this.dialog.open(ShowSafeComponent, {
+        const dialogRefShowSafe: MatDialogRef<ShowSafeComponent, any> = this.dialog.open(ShowSafeComponent, {
           data: { safe: safe , iban: this.iban}
         });
 
-        dialogRef.componentInstance.emitter.subscribe((name)=>{
+        dialogRefShowSafe.componentInstance.emitter.subscribe((name)=>{
           if(name !== 'none')
           {
             const safeRow = this.dataSource.data.find(safeRow => safeRow.name === name);
@@ -84,6 +85,19 @@ export class SafePageComponent {
           }
           this.dialog.closeAll();
         })
+        dialogRefShowSafe.componentInstance.updateEmitter.subscribe((newSafe:Safe)=>{
+          const oldSafe = this.safes.find(safe=> safe.name === newSafe.name);
+          if(oldSafe !== undefined)
+          {
+            const index = this.safes.indexOf(oldSafe);
+            if (index !== -1) {
+
+              this.safes.splice(index, 1, newSafe);
+              //this.dataSource._updateChangeSubscription();
+            }
+          }
+
+        })
       }
     });
 
@@ -98,6 +112,7 @@ export class SafePageComponent {
     dialogRef.componentInstance.emitter.subscribe((safe:Safe)=>{
       this.dataSource.data.push({name: safe.name});
       this.dataSource._updateChangeSubscription();
+      this.safes.push(safe);
       this.dialog.closeAll();
     })
   }

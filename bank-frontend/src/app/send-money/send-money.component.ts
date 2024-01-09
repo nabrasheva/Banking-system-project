@@ -28,22 +28,22 @@ export class SendMoneyComponent {
     this.sendingForm = this.fb.group({
       sentAmount: [
         '',
-        [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)],
+        [Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')],
       ],
-      receiverIban: ['', Validators.required],
+      receiverIban: ['', Validators.required, Validators.max(34)],
       reason: ['', Validators.required],
     })
 
     this.cardForm = this.fb.group({
       number: [
         '',
-        [Validators.required, Validators.pattern('^[0-9]{12,19}$')],
+        [Validators.required, Validators.pattern('^[0-9]{16}$')],
       ],
       expiryDate: ['', Validators.required],
       cvv: [
         '',
         [
-          Validators.required
+          Validators.required,  Validators.pattern('^[0-9]{3,4}$')
         ],
       ],
     })
@@ -54,7 +54,7 @@ export class SendMoneyComponent {
       },
       error: err => {
         console.log(err);
-        this.showError(err);
+        this.showError(err.error.error);
       }
     })
   }
