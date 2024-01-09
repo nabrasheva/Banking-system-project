@@ -73,7 +73,7 @@ public class BankUserServiceImpl implements BankUserService {
                 .build();
 
         bankUserRepository.save(user);
-        emailSenderService.sendRegistrationConfirmationEmail(user);
+        emailSenderService.sendRegistrationConfirmationEmail(user,iban,number);
 
 
     }

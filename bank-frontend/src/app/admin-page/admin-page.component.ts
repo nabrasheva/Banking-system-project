@@ -61,8 +61,8 @@ export class AdminPageComponent {
         next: (data) => {
           this.user = data;
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -75,8 +75,8 @@ export class AdminPageComponent {
         next: (data) => {
           this.account = data;
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -103,8 +103,8 @@ export class AdminPageComponent {
 
           console.log("Tran", this.transactionCards)
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -127,8 +127,8 @@ export class AdminPageComponent {
             }
             console.log('Mapped Safes:', this.safesCards);
           },
-          error: (error) => {
-            console.log(error)
+          error: err => {
+            this.showInfo(err.error.error);
           }
         });
     }
@@ -141,8 +141,8 @@ export class AdminPageComponent {
         next: (data) => {
           this.card = data;
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -194,7 +194,7 @@ export class AdminPageComponent {
           this.ibanForm.get('iban')?.reset('');
         },
         error: err => {
-          this.showInfo("Error deleting the user!")
+          this.showInfo(err.error.error);
         }
       });
     }

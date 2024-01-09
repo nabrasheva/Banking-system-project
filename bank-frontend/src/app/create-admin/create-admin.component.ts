@@ -21,7 +21,7 @@ export class CreateAdminComponent {
     this.createForm = this.fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.email]],
-      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')]],
+      password: ['', [Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{3,30}$')]],
       country: ['', [Validators.required]]
     })
   }
@@ -52,7 +52,7 @@ export class CreateAdminComponent {
       },
       error: err => {
         console.log(err);
-        this.showError(err);
+        this.showError(this.errorMessage = err.error.error);
       }
     })
   }

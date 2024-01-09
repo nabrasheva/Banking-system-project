@@ -29,9 +29,10 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     }
 
     @Override
-    public void sendRegistrationConfirmationEmail(final BankUser user) throws MailjetSocketTimeoutException, MailjetException {
+    public void sendRegistrationConfirmationEmail(final BankUser user, String iban, String number) throws MailjetSocketTimeoutException, MailjetException {
         final String recipientEmail = user.getEmail();
         final String recipientName = user.getUsername();
+        String loginUrl = "http://localhost:4200/login";
 
         final MailjetClient client;
         final MailjetRequest request;
@@ -50,7 +51,10 @@ public class EmailSenderServiceImpl implements EmailSenderService {
                                 .put(Emailv31.Message.SUBJECT, "Your registration confirmation")
                                 .put(Emailv31.Message.HTMLPART,
                                         "<h3>Dear " + recipientName +
-                                                ",</h3><p>You have successfully registered. " + "</p>")
+                                                ",</h3><p>You have successfully registered. " + "</p>" +
+                                                "<p>Your IBAN is: " + iban + "</p>" +
+                                                "<p>Your debit card number is: " + number + "</p>" +
+                                                "<p>You can use this <a href='" + loginUrl + "'>link to login</a>.</p>")
                         ));
 
         client.post(request);
