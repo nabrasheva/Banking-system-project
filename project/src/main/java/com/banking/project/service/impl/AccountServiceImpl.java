@@ -179,6 +179,10 @@ public class AccountServiceImpl implements AccountService {
 
         Transaction autoTransaction = autoTransaction(accountSender);
         BigDecimal reduceAmount = amount.subtract(autoTransaction.getSentAmount());
+        if(reduceAmount.compareTo(accountSender.getAvailableAmount()) > 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
         accountSender.setAvailableAmount(accountSender.getAvailableAmount().subtract(reduceAmount));
 
         accountRepository.save(accountSender);
@@ -199,12 +203,16 @@ public class AccountServiceImpl implements AccountService {
         }
         final Account account = accountRepository.findAccountByIban(loanDto.getUserIban()).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
-
         final Transaction userTransaction = Transaction.builder().sentAmount(amount).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
-        account.getTransactions().add(userTransaction);
 
         Transaction loanTransaction = loanTax(account);
 
+        if (loanTransaction.getSentAmount().compareTo(account.getAvailableAmount()) > 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
+
+        account.getTransactions().add(userTransaction);
         account.setCreditAmount(account.getCreditAmount().add(amount));
         BigDecimal availableAmount = amount.add(loanTransaction.getSentAmount());
         account.setAvailableAmount(account.getAvailableAmount().add(availableAmount));
@@ -243,13 +251,18 @@ public class AccountServiceImpl implements AccountService {
 
 
         final Transaction userTransaction = Transaction.builder().sentAmount(amount.negate()).reason("Returning a loan").issueDate(LocalDateTime.now()).creditPayment(true).build();
-        account.getTransactions().add(userTransaction);
 
         Transaction loanTransaction = loanTax(account);
 
         BigDecimal reduceAmount = amount.subtract(loanTransaction.getSentAmount());
-        account.setAvailableAmount(account.getAvailableAmount().subtract(reduceAmount));
 
+        if (account.getAvailableAmount().compareTo(reduceAmount) < 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
+
+        account.setAvailableAmount(account.getAvailableAmount().subtract(reduceAmount));
+        account.getTransactions().add(userTransaction);
         account.setCreditAmount(account.getCreditAmount().subtract(amount));
         accountRepository.save(account);
 
@@ -275,17 +288,38 @@ public class AccountServiceImpl implements AccountService {
         }
         final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
-
+        BigDecimal availableAmount = account.getAvailableAmount();
+        if (funds.compareTo(availableAmount) > 0) {
+            throw new NotEnoughFundsException("New funds should be less than the available amount in your account!");
+        }
         final Optional<Safe> safeOptional = account.getSafes().stream().filter(foundSafe -> foundSafe.getName().equals(name)).findFirst();
 
         if (safeOptional.isEmpty()) {
             throw new SafeNotFoundException(SAFE_NOT_FOUND_MESSAGE);
         }
 
+        Transaction transaction = Transaction
+                .builder()
+                .reason("Sending money to safe")
+                .issueDate(LocalDateTime.now())
+                .sentAmount(funds.negate())
+                .creditPayment(false)
+                .build();
+
+        Transaction autoTransaction = autoTransaction(account);
+        BigDecimal newFunds = funds.subtract(autoTransaction.getSentAmount());
+        if(availableAmount.compareTo(newFunds) < 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
         final Safe safe = safeOptional.get();
 
         safe.setInitialFunds(safe.getInitialFunds().add(funds));
+        account.setAvailableAmount(availableAmount.subtract(newFunds));
 
+        account.getTransactions().add(transaction);
+
+        accountRepository.save(account);
         safeService.saveSafe(safe);
 
     }

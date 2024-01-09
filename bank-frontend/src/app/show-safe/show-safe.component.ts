@@ -16,6 +16,7 @@ export class ShowSafeComponent {
 
   @Input() safe!:Safe;
   @Output() emitter = new EventEmitter<any>();
+  @Output() updateEmitter = new EventEmitter<any>();
   dataSource: MatTableDataSource<ShowSafeRow> = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'funds', 'update_btn', 'delete_btn'];
   iban!:string;
@@ -53,15 +54,19 @@ export class ShowSafeComponent {
       let safe = this.dataSource.data.at(0);
       if(safe !== undefined)
       {
+        console.log('in if')
         this.safeService.getSafeByName(name).subscribe({
           next:value => {
-            const showSafeRow: ShowSafeRow = {
-              name: value.name,
-              funds: value.initialFunds
-            }
-            this.dataSource.data.pop();
-            this.dataSource.data.push(showSafeRow);
-            this.dataSource._updateChangeSubscription();
+            // this.safe = value;
+            // console.log(this.safe)
+            this.updateEmitter.emit(value);
+            // const showSafeRow: ShowSafeRow = {
+            //   name: this.safe.name,
+            //   funds: this.safe.initialFunds
+            // }
+            // this.dataSource.data.splice(0, 1);
+            // this.dataSource.data.push(showSafeRow);
+            // this.dataSource._updateChangeSubscription();
           },
           error: err => {
            console.log(err);

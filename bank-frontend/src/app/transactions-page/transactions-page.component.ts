@@ -18,7 +18,7 @@ import {AuthService} from "../services/auth.service";
 })
 export class TransactionsPageComponent {
   displayedColumns: string[] = ['sentAmount', 'receiverIban', 'reason', 'issueDate'];
-  transactions!: Transaction[];
+  transactions: Transaction[] = [];
   dataSource: MatTableDataSource<TransactionRow> = new MatTableDataSource();
   iban!: string;
 

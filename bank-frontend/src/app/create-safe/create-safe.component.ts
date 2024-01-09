@@ -24,7 +24,7 @@ export class CreateSafeComponent {
     this.safeForm = this.fb.group({
       name: ['', [Validators.required]],
       key:['', [Validators.required]],
-      initialFunds: ['',[ Validators.min(1), Validators.required]]
+      initialFunds: ['',[ Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')]]
     })
   }
 
@@ -42,7 +42,9 @@ export class CreateSafeComponent {
       return;
     }
 
-    const newSafe: Safe = this.safeForm.getRawValue();
+    let newSafe: Safe = this.safeForm.getRawValue();
+    newSafe.name = newSafe.name.trim();
+    newSafe.key = newSafe.key.trim();
 
     this.accountService.createSafeForAccount(this.iban, newSafe).subscribe({
       next:value => {
@@ -50,8 +52,8 @@ export class CreateSafeComponent {
         this.safeForm.reset();
       },
       error: err => {
-        console.log(err);
-        this.showError(err);
+        console.log(err.error.error);
+        this.showError(err.error.error);
       }
     })
   }

@@ -10,10 +10,9 @@ public class DebitCardNumberGenerator {
     public static String generateDebitCardNumber() {
         final Random random = new Random();
 
-        // Generate a 16-digit random card number (for testing purposes)
-        final StringBuilder cardNumber = new StringBuilder("4");  // Starting with the standard '4' for Visa
+        final StringBuilder cardNumber = new StringBuilder("4");
         for (int i = 1; i < 16; i++) {
-            cardNumber.append(random.nextInt(10));  // Append random digits
+            cardNumber.append(random.nextInt(10));
         }
 
         return cardNumber.toString();

@@ -62,6 +62,6 @@ public class GlobalExceptionHandler {
 
 
     private Map<String, List<String>> formatErrorsResponse(final String... errors) {
-        return Map.of("Error", Arrays.asList(errors));
+        return Map.of("error", Arrays.asList(errors));
     }
 }
