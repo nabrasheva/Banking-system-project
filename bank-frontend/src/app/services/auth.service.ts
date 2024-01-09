@@ -45,4 +45,10 @@ export class AuthService {
     this.router.navigate(['/login']).then(r=>r);
   }
 
+  logoutAdmin(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    this.router.navigate(['/loginAdmin']).then(r=>r);
+  }
+
 }

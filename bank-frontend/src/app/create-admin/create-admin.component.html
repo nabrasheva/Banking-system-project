@@ -1,0 +1,41 @@
+<div id="create-form" [formGroup]="createForm">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput id="username-input" formControlName="username">
+    <mat-error *ngIf="this.createForm.get('username')?.hasError('required')">Username must be valid</mat-error>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput id="email" formControlName="email">
+    <mat-error *ngIf="this.createForm.get('email')?.hasError('email')">Email must be valid</mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput id="password" formControlName="password">
+    <mat-error *ngIf="this.createForm.get('password')?.hasError('required')">Password is required</mat-error>
+    <mat-error *ngIf="this.createForm.get('password')?.hasError('pattern')">Password must meet the requirements</mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select Country:</mat-label>
+    <mat-select  formControlName="country">
+      <mat-option value="BG">Bulgaria</mat-option>
+      <mat-option value="ES">Spain</mat-option>
+      <mat-option value="GB">Great Britain</mat-option>
+      <mat-option value="FR">France</mat-option>
+      <mat-option value="AU">Austria</mat-option>
+      <mat-option value="PL">Poland</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <button type="submit" mat-stroked-button color="primary" (click)="addAdmin()" >Add Admin</button>
+
+  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>
