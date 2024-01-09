@@ -33,7 +33,16 @@ export class LoginAdminComponent {
 
     this.authService.login(this.adminLoginForm.value).subscribe({
       next: () => {
-        localStorage.setItem('email', this.adminLoginForm.get('email')?.value);
+        const isUser = localStorage.getItem('isUser');
+        if(isUser === 'true')
+        {
+          localStorage.removeItem('token');
+          localStorage.removeItem('email');
+          localStorage.removeItem('isUser');
+          this.errorMessage = 'Email or password is incorrect';
+          return;
+        }
+        //localStorage.setItem('email', this.adminLoginForm.get('email')?.value);
         this.router.navigate(['admin']).then(r=>r);
       },
       error: () => {

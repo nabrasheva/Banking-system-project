@@ -22,6 +22,8 @@ export class AuthService {
           localStorage.setItem('token', token);
           const email = response.email;
           localStorage.setItem('email', email);
+          const isUser = response.user;
+          localStorage.setItem('isUser', isUser);
         })
       );
   }
@@ -42,6 +44,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
+    localStorage.removeItem('isUser');
     this.router.navigate(['/login']).then(r=>r);
   }
 

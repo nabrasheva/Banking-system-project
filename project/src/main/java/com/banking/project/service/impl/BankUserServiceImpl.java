@@ -109,6 +109,7 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public LoginResponse login(final LoginRequest loginRequest) {
+
         try {
             final UserDetails userDetails = (UserDetails) authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -118,10 +119,14 @@ public class BankUserServiceImpl implements BankUserService {
             ).getPrincipal();
 
             final String jwtToken = jwtService.generateToken(userDetails);
+            final BankUser user = bankUserRepository.findBankUserByEmail(loginRequest.getEmail()).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+            boolean isUser;
+            isUser = user.getRole().getType().equals("USER");
 
             return LoginResponse.builder()
                     .email(loginRequest.getEmail())
                     .token(jwtToken)
+                    .user(isUser)
                     .build();
         } catch (final BadCredentialsException e) {
             throw new BadCredentialsException("Bad credentials");

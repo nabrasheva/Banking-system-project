@@ -9,16 +9,17 @@ import {AccountPageComponent} from "./account-page/account-page.component";
 import {ProfilePageComponent} from "./profile-page/profile-page.component";
 import {LoginAdminComponent} from "./login/login-admin/login-admin.component";
 import {AdminPageComponent} from "./admin-page/admin-page.component";
+import {AuthGardService} from "./services/auth-gard.service";
 
 const routes: Routes = [{path: 'login', component: LoginUserComponent},
   {path: 'loginAdmin', component: LoginAdminComponent},
-  {path: 'admin',component:AdminPageComponent},
+  {path: 'admin',component:AdminPageComponent,  canActivate:[AuthGardService]},
   {path: 'signup', component: SignupComponent},
-  {path: 'welcomePage', component: WelcomePageComponent},
-  {path: 'safes', component: SafePageComponent},
-  { path: 'transactions', component: TransactionsPageComponent },
-  { path: 'account', component: AccountPageComponent },
-  { path: 'profile', component: ProfilePageComponent }];
+  {path: 'welcomePage', component: WelcomePageComponent,  canActivate:[AuthGardService]},
+  {path: 'safes', component: SafePageComponent, canActivate:[AuthGardService]},
+  { path: 'transactions', component: TransactionsPageComponent, canActivate: [AuthGardService] },
+  { path: 'account', component: AccountPageComponent, canActivate: [AuthGardService] },
+  { path: 'profile', component: ProfilePageComponent, canActivate: [AuthGardService] }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
