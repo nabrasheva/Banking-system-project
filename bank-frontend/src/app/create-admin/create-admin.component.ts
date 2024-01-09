@@ -44,6 +44,7 @@ export class CreateAdminComponent {
     let newAdmin: BankUser = this.createForm.getRawValue();
     newAdmin.username =newAdmin.username.trim();
     newAdmin.email =newAdmin.email.trim();
+    newAdmin.password = newAdmin.password.trim();
 
     this.userService.createAdmin(newAdmin).subscribe({
       next: value => {

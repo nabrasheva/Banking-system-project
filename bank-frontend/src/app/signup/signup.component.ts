@@ -38,8 +38,10 @@ export class SignupComponent {
 
     this.errorMessage = '';
 
-    const password = this.signupForm.get('password')?.value;
-    const confirmPassword = this.signupForm.get('confirmPassword')?.value;
+    let password = this.signupForm.get('password')?.value;
+    password = password.trim();
+    let confirmPassword = this.signupForm.get('confirmPassword')?.value;
+    password = password.trim();
 
     if (password !== confirmPassword) {
       this.passwordMismatch = true;

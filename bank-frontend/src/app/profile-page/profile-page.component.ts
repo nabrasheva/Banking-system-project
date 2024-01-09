@@ -47,8 +47,16 @@ export class ProfilePageComponent {
         });
 
         dialogRef.componentInstance.emitter.subscribe((userCredentials: UpdateBankUser) => {
+          if( userCredentials.username !== '')
+          {
             this.user.username = userCredentials.username;
+          }
+
+          if( userCredentials.password !== '')
+          {
             this.user.password = userCredentials.password;
+          }
+
             this.dialog.closeAll();
         });
     }

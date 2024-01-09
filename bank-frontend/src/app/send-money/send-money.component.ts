@@ -28,10 +28,10 @@ export class SendMoneyComponent {
     this.sendingForm = this.fb.group({
       sentAmount: [
         '',
-        [Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')],
+        [Validators.required,Validators.pattern('^\\d+(\\.\\d{1,2})?$')],
       ],
-      receiverIban: ['', Validators.required, Validators.max(34)],
-      reason: ['', Validators.required],
+      receiverIban: ['', [Validators.required, Validators.max(34)]],
+      reason: ['', [Validators.required]],
     })
 
     this.cardForm = this.fb.group({
@@ -77,12 +77,13 @@ export class SendMoneyComponent {
       return;
     }
 
-    const number = this.cardForm.get('number')?.value;
+    const number:string = this.cardForm.get('number')?.value;
     const cvv = this.cardForm.get('cvv')?.value;
 
-    if(number !== this.card.number || cvv !== this.card.cvv || this.cardForm.get('expiryDate')?.value !== this.card.expiryDate)
+    if(number !== this.card.number || cvv !== this.card.cvv.toString() || this.cardForm.get('expiryDate')?.value !== this.card.expiryDate.toString())
     {
       this.showError('Invalid debit card!');
+      return;
     }
 
     const newTransaction: SendTransaction = {

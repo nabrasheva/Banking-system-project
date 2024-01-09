@@ -24,7 +24,7 @@ export class TakeLoanComponent {
   ngOnInit(){
     this.iban = this.dialogData.iban;
     this.loanForm = this.fb.group({
-      creditAmount: ['', [ Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')]]
+      creditAmount: ['', [ Validators.required,Validators.pattern('^\\d+(\\.\\d{1,2})?$')]]
     })
   }
 

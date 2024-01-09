@@ -26,8 +26,8 @@ export class LoginAdminComponent {
     private dialog: MatDialog,
   ) {
     this.adminLoginForm = this.fb.group({
-      email:['', Validators.email],
-      password: ['',Validators.required]
+      email:['', [Validators.email, Validators.pattern('\\S+')]],
+      password: ['',[Validators.required, Validators.pattern('\\S+')]]
     });
   }
 

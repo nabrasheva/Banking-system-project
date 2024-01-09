@@ -24,7 +24,7 @@ export class CreateSafeComponent {
     this.safeForm = this.fb.group({
       name: ['', [Validators.required]],
       key:['', [Validators.required]],
-      initialFunds: ['',[ Validators.required, Validators.pattern('/^\d+(\.\d{1,2})?$/')]]
+      initialFunds: ['',[ Validators.required, Validators.pattern('^\\d+(\\.\\d{1,2})?$')]]
     })
   }
 

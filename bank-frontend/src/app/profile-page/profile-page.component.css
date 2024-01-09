@@ -20,7 +20,7 @@
 }
 
 .example-card {
-    max-width: 400px;
+    width: 400px;
     margin-bottom: 4px;
 }
 
@@ -29,4 +29,14 @@
     justify-content: center;
     align-items: flex-start;
     height: 50vh;
+}
+
+.update-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-button button{
+  background: linear-gradient(90deg,  lightblue, darkblue);
 }

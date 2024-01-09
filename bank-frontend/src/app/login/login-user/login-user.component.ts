@@ -26,11 +26,10 @@ export class LoginUserComponent {
     private dialog: MatDialog,
   ) {
     this.loginForm = this.fb.group({
-      email: ['', Validators.email],
-      password: ['', ]
+      email:['', [Validators.email, Validators.pattern('\\S+')]],
+      password: ['',[Validators.required, Validators.pattern('\\S+')]]
     });
   }
-  // Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')
   login(){
     if(!this.loginForm.valid){
       return;

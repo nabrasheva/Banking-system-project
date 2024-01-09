@@ -1,5 +1,5 @@
 INSERT INTO public.debit_card (number, expiry_date, cvv)
-VALUES ('1234567890123456', '2023-12-31', 123),
+VALUES ('1234567890123456', '2025-12-31', 123),
        ('9876543210987654', '2024-12-31', 456);
 
 INSERT INTO public.account (iban, available_amount, credit_amount, debit_card_id)
@@ -7,11 +7,11 @@ VALUES ('IBAN123456789', 1000.00, 100, 1),
        ('IBAN987654321', 847.50, 101.00, 2);
 
 INSERT INTO public.bank_user (email, username, password, country, role, account_id)
-VALUES ('user1@gmail.com', 'user1', '$2a$10$2sZZVIg5Zno9sG6SqQ4OPuSwDJr6hTnsErnrKTSOkDyyIDu7sfiea', 'Country1', 'USER',
+VALUES ('user1@gmail.com', 'user1', '$2a$10$2sZZVIg5Zno9sG6SqQ4OPuSwDJr6hTnsErnrKTSOkDyyIDu7sfiea', 'BG', 'USER',
         1),
-       ('admin@gmail.com', 'admin', '$2a$10$aSHo/fBPG4vNdilwJwqqVeCSSc644QNT81N644rCqs0NfLK2NgMla', 'Country2',
+       ('admin@gmail.com', 'admin', '$2a$10$aSHo/fBPG4vNdilwJwqqVeCSSc644QNT81N644rCqs0NfLK2NgMla', 'FR',
         'ADMIN', null),
-       ('user2@gmail.com', 'user2', '$2a$10$zYh.At7anoikUklOuSDLp.Pvqy2ALKW.skdwKYJVpPaza69XlvA/m', 'CountryN', 'USER',
+       ('user2@gmail.com', 'user2', '$2a$10$zYh.At7anoikUklOuSDLp.Pvqy2ALKW.skdwKYJVpPaza69XlvA/m', 'GB', 'USER',
         2);
 
 INSERT INTO public.safe (name, key, initial_funds, account_id, creation_date)
