@@ -43,7 +43,6 @@ export class LoginUserComponent {
           this.errorMessage = 'Email or password is incorrect';
           return;
         }
-       // localStorage.setItem('email', this.loginForm.get('email')?.value);
         this.router.navigate(['welcomePage']).then(r=>r);
       },
       error: () => {

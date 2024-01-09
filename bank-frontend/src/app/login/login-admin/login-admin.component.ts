@@ -42,7 +42,6 @@ export class LoginAdminComponent {
           this.errorMessage = 'Email or password is incorrect';
           return;
         }
-        //localStorage.setItem('email', this.adminLoginForm.get('email')?.value);
         this.router.navigate(['admin']).then(r=>r);
       },
       error: () => {
