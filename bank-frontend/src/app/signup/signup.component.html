@@ -50,3 +50,7 @@
     <p>Already have an account? <a [routerLink]="['../login']">Login</a></p>
   </mat-card>
 </div>
+
+<div *ngIf="isInfoMessage" class="info-message">
+  {{ infoMessage }}
+</div>

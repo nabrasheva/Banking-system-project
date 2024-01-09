@@ -48,7 +48,7 @@ export class SignupComponent {
 
     this.signupService.signup(this.signupForm.value).subscribe({
       next: () => {
-        this.router.navigate(['login']);
+        this.showInfo("Registration is success! Check your email!");
       },
       error: (err) => {
         this.errorMessage = err.error.error;
@@ -56,10 +56,10 @@ export class SignupComponent {
     });
   }
 
-  // public showInfo(message:string): void {
-  //   this.isInfoMessage = true;
-  //   this.infoMessage = message;
-  // }
+  public showInfo(message:string): void {
+    this.isInfoMessage = true;
+    this.infoMessage = message;
+  }
   //
   // public closeModal(): void {
   //   this.isInfoMessage = false;

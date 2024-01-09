@@ -1,8 +1,8 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Output, ViewEncapsulation} from '@angular/core';
 import {Account} from "../model/account";
 import {Transaction} from "../model/transaction";
 import {Safe} from "../model/safe";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AccountService} from "../services/account.service";
 import {BankUserService} from "../services/bank-user.service";
@@ -10,6 +10,8 @@ import {DebitCard} from "../model/debit-card";
 import {BankUser} from "../model/bank-user";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
+import {CreateAdminComponent} from "../create-admin/create-admin.component";
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-admin-page',
@@ -18,17 +20,21 @@ import {AuthService} from "../services/auth.service";
   encapsulation: ViewEncapsulation.None
 })
 export class AdminPageComponent {
+  @Output() emitter = new EventEmitter<any>();
   emailForm: FormGroup;
   ibanForm: FormGroup;
   account!: Account | undefined;
-  transactions!: Transaction[];
-  safes!: Safe[];
+  transactions!: Transaction[] | undefined;
+  safes!: Safe[] | undefined;
   card!: DebitCard | undefined;
   user!: BankUser | undefined;
   iban!: string;
   email!: string;
   transactionCards: Transaction[] = [];
   safesCards: Safe[] = [];
+
+  infoMessage: string = '';
+  isInfoMessage: boolean = false;
 
   constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private bankUserService: BankUserService, private fb: FormBuilder, private authService: AuthService) {
     this.emailForm = this.fb.group({
@@ -55,8 +61,8 @@ export class AdminPageComponent {
         next: (data) => {
           this.user = data;
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -69,8 +75,8 @@ export class AdminPageComponent {
         next: (data) => {
           this.account = data;
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -84,19 +90,21 @@ export class AdminPageComponent {
         next: (data) => {
           this.transactions = data;
           console.log(data)
+          if (this.transactions != undefined) {
+            this.transactionCards = this.transactions
+              .map(transaction => ({
+                sentAmount: transaction.sentAmount,
+                receiverIban: transaction.receiverIban,
+                reason: transaction.reason,
+                creditPayment: transaction.creditPayment,
+                issueDate: transaction.issueDate as number
+              }));
+          }
 
-          this.transactionCards = this.transactions
-            .map(transaction => ({
-              sentAmount: transaction.sentAmount,
-              receiverIban: transaction.receiverIban,
-              reason: transaction.reason,
-              creditPayment: transaction.creditPayment,
-              issueDate: transaction.issueDate as number
-            }));
           console.log("Tran", this.transactionCards)
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -110,15 +118,17 @@ export class AdminPageComponent {
           next: (data) => {
             this.safes = data;
             console.log(data)
-            this.safesCards = this.safes.map(safe => ({
-              name: safe.name,
-              key: safe.key,
-              initialFunds: safe.initialFunds
-            }));
+            if (this.safes != undefined){
+              this.safesCards = this.safes.map(safe => ({
+                name: safe.name,
+                key: safe.key,
+                initialFunds: safe.initialFunds
+              }));
+            }
             console.log('Mapped Safes:', this.safesCards);
           },
-          error: (error) => {
-            console.log(error)
+          error: err => {
+            this.showInfo(err.error.error);
           }
         });
     }
@@ -131,8 +141,8 @@ export class AdminPageComponent {
         next: (data) => {
           this.card = data;
         },
-        error: (error) => {
-          console.log(error)
+        error: err => {
+          this.showInfo(err.error.error);
         }
       });
     }
@@ -151,8 +161,55 @@ export class AdminPageComponent {
 
   }
 
+  createAdmin() {
+    const dialogRef: MatDialogRef<CreateAdminComponent, any> = this.dialog.open(CreateAdminComponent, {
+      data: {
+        username: this.user?.username,
+        email: this.user?.email,
+        password: this.user?.password,
+        country: this.user?.country
+      }
+    });
+
+    dialogRef.componentInstance.emitter.subscribe(() => {
+      this.dialog.closeAll();
+    });
+    this.showInfo("Admin is created!");
+
+
+  }
+
+  deleteUser() {
+    const email = this.getEmail();
+    if (email != undefined) {
+      this.bankUserService.deleteUser(email).subscribe({
+        next: value => {
+          this.showInfo("User is deleted!")
+          this.user = undefined;
+          this.card = undefined;
+          this.account = undefined;
+          this.safesCards = [];
+          this.transactionCards = [];
+          this.emailForm.get('email')?.reset('');
+          this.ibanForm.get('iban')?.reset('');
+        },
+        error: err => {
+          this.showInfo(err.error.error);
+        }
+      });
+    }
+  }
 
   logOut() {
-    this.authService.logout();
+    this.authService.logoutAdmin();
+  }
+
+  public showInfo(message: string, duration:number = 10000): void {
+    this.isInfoMessage = true;
+    this.infoMessage = message;
+
+    setTimeout(()=>{
+      this.isInfoMessage = false
+    },duration);
   }
 }

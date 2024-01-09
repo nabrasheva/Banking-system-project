@@ -26,6 +26,7 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { UpdateBankUserComponent } from './update-bank-user/update-bank-user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import { CreateAdminComponent } from './create-admin/create-admin.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
     AdminPageComponent,
     ProfilePageComponent,
     UpdateBankUserComponent,
+    CreateAdminComponent,
   ],
   imports: [
     BrowserModule,

@@ -110,7 +110,7 @@
               <span matListItemLine>{{ safe?.initialFunds }}</span>
             </p>
           </mat-list-item>
-          <mat-list-item *ngFor="let transaction of transactions">
+          <mat-list-item *ngFor="let transaction of transactionCards">
             <h3> Transactions Information</h3>
             <p>
               <span matListItemTitle>Sent amount</span>
@@ -136,4 +136,14 @@
     </mat-card>
   </div>
 </div>
+
+<div class="button-container">
+  <button mat-fab extended="" class="create" (click)="createAdmin()">Create admin </button>
+  <button mat-fab extended="" class="delete" (click)="deleteUser()">Delete user </button>
+</div>
+
+<div *ngIf="isInfoMessage" class="info-message">
+  {{ infoMessage }}
+</div>
+
 
