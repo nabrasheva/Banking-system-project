@@ -53,7 +53,7 @@ export class CreateAdminComponent {
       },
       error: err => {
         console.log(err);
-        this.showError(this.errorMessage = err.error.error);
+        this.showError(err.error.error);
       }
     })
   }
