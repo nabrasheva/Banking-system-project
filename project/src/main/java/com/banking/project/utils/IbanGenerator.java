@@ -43,10 +43,10 @@ public class IbanGenerator {
             }
         }
 
-        // Use BigInteger to handle large numbers
+
         final BigInteger numericValue = new BigInteger(numericInput.toString());
 
-        // Perform modulo 97 and subtract from 98
+
         final int checksumValue = 98 - (numericValue.mod(BigInteger.valueOf(97))).intValue();
         return String.format("%02d", checksumValue);
     }
