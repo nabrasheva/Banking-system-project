@@ -166,14 +166,6 @@ public class AccountServiceImpl implements AccountService {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
-        final Optional<Account> accountReceiverOptional = accountRepository.findAccountByIban(receiverIban);
-        if (accountReceiverOptional.isPresent()) {
-            final Account accountReceiver = accountReceiverOptional.get();
-            accountReceiver.setAvailableAmount(accountReceiver.getAvailableAmount().add(amount));
-            accountRepository.save(accountReceiver);
-        }
-
-
         final Transaction userTransaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
         accountSender.getTransactions().add(userTransaction);
 
@@ -186,7 +178,14 @@ public class AccountServiceImpl implements AccountService {
         accountSender.setAvailableAmount(accountSender.getAvailableAmount().subtract(reduceAmount));
 
         accountRepository.save(accountSender);
-
+        final Optional<Account> accountReceiverOptional = accountRepository.findAccountByIban(receiverIban);
+        if (accountReceiverOptional.isPresent()) {
+            final Account accountReceiver = accountReceiverOptional.get();
+            final Transaction sendTransaction = Transaction.builder().receiverIban(null).sentAmount(amount).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
+            accountReceiver.getTransactions().add(sendTransaction);
+            accountReceiver.setAvailableAmount(accountReceiver.getAvailableAmount().add(amount));
+            accountRepository.save(accountReceiver);
+        }
         final List<Transaction> transactions = List.of(userTransaction, autoTransaction);
 
         return transactions.stream()

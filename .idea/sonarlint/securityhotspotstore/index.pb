@@ -237,3 +237,7 @@ h
 8bank-frontend/src/app/services/auth-gard.service.spec.ts,8\7\871af9244192b28193ce5adf3c8a1cb0817d8aaf
 c
 3bank-frontend/src/app/services/auth-gard.service.ts,2\0\204742da2fa05fe8dadd23507a1edc7cd6e5cabb
+n
+>bank-frontend/src/app/create-admin/create-admin.component.html,7\6\7654c87ed58a3a90a5ab8e1acc7944c8d8c25358
+l
+<bank-frontend/src/app/create-admin/create-admin.component.ts,7\a\7a6020312bc98b87d39534c797239db95bd8e2ed

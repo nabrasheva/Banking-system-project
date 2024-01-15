@@ -56,6 +56,7 @@ export class SignupComponent {
         this.errorMessage = err.error.error;
       }
     });
+    this.signupForm.reset();
   }
 
   public showInfo(message:string): void {
