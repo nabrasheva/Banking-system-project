@@ -26,10 +26,7 @@ export class SendMoneyComponent {
   ngOnInit(){
     this.iban = this.dialogData.iban;
     this.sendingForm = this.fb.group({
-      sentAmount: [
-        '',
-        [Validators.required,Validators.pattern('^\\d+(\\.\\d{1,2})?$')],
-      ],
+      sentAmount:  ['', [Validators.required, Validators.pattern('^(?!0+(\\.0{1,2})?$)\\d+(\\.\\d{1,2})?$')]],
       receiverIban: ['', [Validators.required, Validators.max(34)]],
       reason: ['', [Validators.required]],
     })

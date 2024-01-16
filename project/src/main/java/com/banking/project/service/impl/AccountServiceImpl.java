@@ -158,7 +158,7 @@ public class AccountServiceImpl implements AccountService {
         final BigDecimal amount = transactionDto.getSentAmount();
         final String receiverIban = transactionDto.getReceiverIban();
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
         final Account accountSender = accountRepository.findAccountByIban(senderIban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
@@ -197,7 +197,7 @@ public class AccountServiceImpl implements AccountService {
     public List<TransactionDto> takeLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0 ) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
         final Account account = accountRepository.findAccountByIban(loanDto.getUserIban()).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
@@ -229,7 +229,7 @@ public class AccountServiceImpl implements AccountService {
     public List<TransactionDto> returnLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
