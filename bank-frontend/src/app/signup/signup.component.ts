@@ -45,6 +45,7 @@ export class SignupComponent {
 
     if (password !== confirmPassword) {
       this.passwordMismatch = true;
+      this.errorMessage = "Confirm password is incorrect!"
       return;
     }
 
