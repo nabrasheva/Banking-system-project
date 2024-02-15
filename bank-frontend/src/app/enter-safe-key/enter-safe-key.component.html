@@ -1,0 +1,12 @@
+<div id="enter-form" [formGroup]="keyForm">
+
+  <mat-form-field>
+    <mat-label>Enter safe key</mat-label>
+    <textarea matInput id="key-input" formControlName="key"></textarea>
+  </mat-form-field>
+
+  <button type="submit" mat-stroked-button color="primary" (click)="authenticateSafeView()" >Authenticate</button>
+
+ <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>

@@ -1,0 +1,44 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header-btn {
+  margin: 10px;
+  cursor: pointer;
+  background-color: white;
+  color: #182B3A;
+}
+#header {
+  background: linear-gradient(90deg,  lightblue, #717676);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+#header_toolbar {
+  font-size: 20px;
+}
+
+.main-part{
+  margin: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome_text{
+  margin: 10px;
+  font-size: 30px;
+  font-family: "Arial Black", sans-serif;
+}
+
+#choose_list{
+  margin: 3%;
+}
+
+.button-row {
+  display: flex;
+}
+button{
+  margin: 1%;
+}

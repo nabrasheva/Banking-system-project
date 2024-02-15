@@ -1,0 +1,22 @@
+<p>
+  <mat-toolbar id="header">
+    <span id="header_toolbar">Online Banking System</span>
+    <span class="spacer"></span>
+    <button mat-fab extended="" color="primary" class="header-btn" (click)="navigateToProfile()">{{'Go to Profile👥'}}</button>
+    <button  mat-fab extended="" color="primary" class="header-btn" (click)="logOut()" >{{'LogOut️‍➡️'}}</button>
+  </mat-toolbar>
+</p>
+
+<div class="main-part">
+<p>
+  <span class="welcome_text"> Welcome!</span>
+  <span class="welcome_text">Choose from:</span>
+</p>
+<p class="button-row">
+  <button mat-raised-button color="primary" (click)="navigateToAccountPage()">View Account</button>
+  <button mat-raised-button color="accent" (click)="navigateToTransactionsPage()">Transactions</button>
+  <button mat-raised-button color="warn" (click)="navigateToSafesPage()" >Safes</button>
+</p>
+</div>
+
+

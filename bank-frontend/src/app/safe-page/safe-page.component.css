@@ -1,0 +1,50 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header-btn {
+  margin: 10px;
+  cursor: pointer;
+  background-color: white;
+  color: #182B3A;
+}
+#header {
+  background: linear-gradient(90deg,  lightblue, #717676);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+#header_toolbar {
+  font-size: 20px;
+}
+.mat-elevation-z8 {
+  width: 100%;
+  border-collapse: separate;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgb(184, 0, 253);
+
+}
+
+.mat-elevation-z8 caption {
+  font-family: "Arial Black", sans-serif;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.mat-elevation-z8 th, .mat-elevation-z8 td {
+  padding: 8px;
+  border-radius: 2em;
+
+}
+button{
+  margin-top: 15px;
+  box-shadow: 0 4px 8px rgba(184, 0, 253, 0.44);
+  transition: transform 0.3s ease;
+}
+button:hover{
+  color: aqua;
+  transform: translateY(-2px);
+
+}

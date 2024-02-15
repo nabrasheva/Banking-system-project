@@ -1,0 +1,49 @@
+<div id="create-form" [formGroup]="sendingForm">
+  <mat-form-field>
+    <mat-label>Amount</mat-label>
+    <input matInput id="sentAmount" formControlName="sentAmount">
+    <mat-error *ngIf="this.sendingForm.get('sentAmount')?.hasError('required')">Amount is required</mat-error>
+    <mat-error *ngIf="this.sendingForm.get('sentAmount')?.hasError('pattern')">Money should be valid number</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Receiver Iban</mat-label>
+    <input matInput id="receiverIban" formControlName="receiverIban">
+    <mat-error *ngIf="this.sendingForm.get('receiverIban')?.hasError('required')">Iban of receiver is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Reason</mat-label>
+    <textarea matInput id="reason" formControlName="reason"></textarea>
+    <mat-error *ngIf="this.sendingForm.get('reason')?.hasError('required')">Reason is required</mat-error>
+  </mat-form-field>
+
+  <div id="debit-card" [formGroup]="cardForm" >
+    <mat-form-field>
+      <mat-label>Number</mat-label>
+      <input matInput id="number" formControlName="number">
+      <mat-error *ngIf="this.sendingForm.get('number')?.hasError('required')">Card number is required</mat-error>
+      <mat-error *ngIf="this.sendingForm.get('number')?.hasError('pattern')">Card number should be valid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Expiry date</mat-label>
+      <input matInput id="expiryDate" formControlName="expiryDate" type="date">
+      <mat-error *ngIf="this.sendingForm.get('expiryDate')?.hasError('required')">Expiry date is required</mat-error>
+      <mat-error *ngIf="this.sendingForm.get('expiryDate')?.hasError('pattern')">Expiry date should be valid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>CVV</mat-label>
+      <input matInput id="cvv" formControlName="cvv">
+      <mat-error *ngIf="this.sendingForm.get('cvv')?.hasError('required')">CVV is required</mat-error>
+      <mat-error *ngIf="this.sendingForm.get('cvv')?.hasError('pattern')">CVV should be valid</mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <button type="submit" mat-stroked-button color="primary" (click)="sendMoney()" >Send Money</button>
+
+  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>
