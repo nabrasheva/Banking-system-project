@@ -21,13 +21,13 @@ import com.banking.project.service.DebitCardService;
 import com.banking.project.service.SafeService;
 import com.banking.project.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long createSafeForAccount(final String iban, final SafeDto safeDto) {
+    public SafeDto createSafeForAccount(final String iban, final SafeDto safeDto) {
         final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (safeService.doesNameExist(safeDto.getName())) {
@@ -68,6 +68,7 @@ public class AccountServiceImpl implements AccountService {
                 .name(safeDto.getName())
                 .key(safeDto.getKey())
                 .initialFunds(safeDto.getInitialFunds())
+                .creationDate(LocalDate.now())
                 .build();
 
         if ((safeDto.getInitialFunds().compareTo(BigDecimal.ZERO) == 0) || (safe.getInitialFunds().compareTo(account.getAvailableAmount()) > 0)) {
@@ -81,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.save(account);
 
-        return safe.getId();
+        return mapper.map(safe, SafeDto.class);
     }
 
     @Override
@@ -103,7 +104,9 @@ public class AccountServiceImpl implements AccountService {
         if (yearsDifference.equals(BigDecimal.ZERO)) {
             account.setAvailableAmount(account.getAvailableAmount().add(initialFunds));
         } else {
-            final BigDecimal newFunds = yearsDifference.multiply(initialFunds).multiply(BigDecimal.valueOf(0.5));
+            BigDecimal annualInterestRate = BigDecimal.valueOf(0.01);
+            BigDecimal ratePlusOne = BigDecimal.ONE.add(annualInterestRate);
+            BigDecimal newFunds = initialFunds.multiply(ratePlusOne.pow(yearsDifference.intValue()));
             account.setAvailableAmount(account.getAvailableAmount().add(newFunds));
         }
 
@@ -151,11 +154,11 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public TransactionDto sendMoney(final String senderIban, final TransactionDto transactionDto) {
+    public List<TransactionDto> sendMoney(final String senderIban, final TransactionDto transactionDto) {
         final BigDecimal amount = transactionDto.getSentAmount();
         final String receiverIban = transactionDto.getReceiverIban();
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
         final Account accountSender = accountRepository.findAccountByIban(senderIban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
@@ -163,49 +166,70 @@ public class AccountServiceImpl implements AccountService {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
-        final Optional<Account> accountReceiverOptional = accountRepository.findAccountByIban(receiverIban);
-        if (accountReceiverOptional.isPresent()) {
-            final Account accountReceiver = accountReceiverOptional.get();
-            accountReceiver.setAvailableAmount(accountReceiver.getAvailableAmount().add(amount));
-            accountRepository.save(accountReceiver);
+        final Transaction userTransaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
+        accountSender.getTransactions().add(userTransaction);
+
+        Transaction autoTransaction = autoTransaction(accountSender);
+        BigDecimal reduceAmount = amount.subtract(autoTransaction.getSentAmount());
+        if(reduceAmount.compareTo(accountSender.getAvailableAmount()) > 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
         }
-
-
-        final Transaction transaction = Transaction.builder().receiverIban(receiverIban).sentAmount(amount.negate()).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
-        accountSender.getTransactions().add(transaction);
-
-        BigDecimal reduceAmount = autoTransaction(accountSender,amount);
         accountSender.setAvailableAmount(accountSender.getAvailableAmount().subtract(reduceAmount));
 
         accountRepository.save(accountSender);
+        final Optional<Account> accountReceiverOptional = accountRepository.findAccountByIban(receiverIban);
+        if (accountReceiverOptional.isPresent()) {
+            final Account accountReceiver = accountReceiverOptional.get();
+            final Transaction sendTransaction = Transaction.builder().receiverIban(null).sentAmount(amount).reason(transactionDto.getReason()).issueDate(LocalDateTime.now()).build();
+            accountReceiver.getTransactions().add(sendTransaction);
+            accountReceiver.setAvailableAmount(accountReceiver.getAvailableAmount().add(amount));
+            accountRepository.save(accountReceiver);
+        }
+        final List<Transaction> transactions = List.of(userTransaction, autoTransaction);
 
-        return  mapper.map(transaction,TransactionDto.class);
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
     }
 
     @Override
-    public TransactionDto takeLoan(final LoanDto loanDto) {
+    public List<TransactionDto> takeLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0 ) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
         final Account account = accountRepository.findAccountByIban(loanDto.getUserIban()).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
-        account.setCreditAmount(account.getCreditAmount().add(amount));
-        account.setAvailableAmount(account.getAvailableAmount().add(amount));
+        final Transaction userTransaction = Transaction.builder().sentAmount(amount).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
 
-        final Transaction transaction = Transaction.builder().sentAmount(amount).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
-        account.getTransactions().add(transaction);
+        Transaction loanTransaction = loanTax(account);
+
+        if (loanTransaction.getSentAmount().compareTo(account.getAvailableAmount()) > 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
+
+        account.getTransactions().add(userTransaction);
+        account.setCreditAmount(account.getCreditAmount().add(amount));
+        BigDecimal availableAmount = amount.add(loanTransaction.getSentAmount());
+        account.setAvailableAmount(account.getAvailableAmount().add(availableAmount));
 
         accountRepository.save(account);
-        return  mapper.map(transaction,TransactionDto.class);
+
+        List<Transaction> transactions = List.of(userTransaction, loanTransaction);
+
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
     }
 
     @Override
-    public TransactionDto returnLoan(final LoanDto loanDto) {
+    public List<TransactionDto> returnLoan(final LoanDto loanDto) {
         final BigDecimal amount = loanDto.getCreditAmount();
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
@@ -224,13 +248,28 @@ public class AccountServiceImpl implements AccountService {
             throw new NotEnoughFundsException(NON_ENOUGH_AMOUNT_MESSAGE);
         }
 
-        account.setAvailableAmount(account.getAvailableAmount().subtract(amount));
-        account.setCreditAmount(account.getCreditAmount().subtract(amount));
-        final Transaction transaction = Transaction.builder().sentAmount(amount.negate()).reason("Taking a loan").issueDate(LocalDateTime.now()).build();
-        account.getTransactions().add(transaction);
 
+        final Transaction userTransaction = Transaction.builder().sentAmount(amount.negate()).reason("Returning a loan").issueDate(LocalDateTime.now()).creditPayment(true).build();
+
+        Transaction loanTransaction = loanTax(account);
+
+        BigDecimal reduceAmount = amount.subtract(loanTransaction.getSentAmount());
+
+        if (account.getAvailableAmount().compareTo(reduceAmount) < 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
+
+        account.setAvailableAmount(account.getAvailableAmount().subtract(reduceAmount));
+        account.getTransactions().add(userTransaction);
+        account.setCreditAmount(account.getCreditAmount().subtract(amount));
         accountRepository.save(account);
-        return  mapper.map(transaction,TransactionDto.class);
+
+        List<Transaction> transactions = List.of(userTransaction, loanTransaction);
+
+        return transactions.stream()
+                .map(transaction -> mapper.map(transaction, TransactionDto.class))
+                .toList();
     }
 
     @Override
@@ -248,25 +287,52 @@ public class AccountServiceImpl implements AccountService {
         }
         final Account account = accountRepository.findAccountByIban(iban).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE));
 
-
+        BigDecimal availableAmount = account.getAvailableAmount();
+        if (funds.compareTo(availableAmount) > 0) {
+            throw new NotEnoughFundsException("New funds should be less than the available amount in your account!");
+        }
         final Optional<Safe> safeOptional = account.getSafes().stream().filter(foundSafe -> foundSafe.getName().equals(name)).findFirst();
 
         if (safeOptional.isEmpty()) {
             throw new SafeNotFoundException(SAFE_NOT_FOUND_MESSAGE);
         }
 
+        Transaction transaction = Transaction
+                .builder()
+                .reason("Sending money to safe")
+                .issueDate(LocalDateTime.now())
+                .sentAmount(funds.negate())
+                .creditPayment(false)
+                .build();
+
+        Transaction autoTransaction = autoTransaction(account);
+        BigDecimal newFunds = funds.subtract(autoTransaction.getSentAmount());
+        if(availableAmount.compareTo(newFunds) < 0)
+        {
+            throw new NotEnoughFundsException("Not enough available amount in account!");
+        }
         final Safe safe = safeOptional.get();
 
         safe.setInitialFunds(safe.getInitialFunds().add(funds));
+        account.setAvailableAmount(availableAmount.subtract(newFunds));
 
+        account.getTransactions().add(transaction);
+
+        accountRepository.save(account);
         safeService.saveSafe(safe);
 
     }
 
-    private BigDecimal autoTransaction(Account account, BigDecimal amount) {
-        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(1)).reason("Transaction tax").issueDate(LocalDateTime.now()).build();
+    private Transaction autoTransaction(Account account) {
+        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(1).negate()).reason("Transaction tax").issueDate(LocalDateTime.now()).build();
         account.getTransactions().add(autoTransaction);
-        return amount.add(autoTransaction.getSentAmount());
+        return autoTransaction;
+    }
+
+    private Transaction loanTax(Account account) {
+        final Transaction autoTransaction = Transaction.builder().sentAmount(BigDecimal.valueOf(10).negate()).reason("Loan transaction tax").issueDate(LocalDateTime.now()).build();
+        account.getTransactions().add(autoTransaction);
+        return autoTransaction;
     }
 
 }

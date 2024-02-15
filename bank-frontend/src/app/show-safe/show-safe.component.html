@@ -1,0 +1,30 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <caption>Safe info</caption>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="funds">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element" > {{element.funds}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="update_btn">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element" > <button mat-raised-button color="primary" (click)="updateSafe(element)">Add money</button> </td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete_btn">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element" > <button mat-raised-button color="primary" (click)="deleteSafe(element)">Delete Safe</button> </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<div class="button-list">
+  <button mat-stroked-button color="primary" id="add-btn" (click)="closeModal()">Close</button>
+</div>

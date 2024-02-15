@@ -14,11 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateBankUserDto {
     @Size(min = 2, message = "{username.Size}")
-    @NotBlank(message = "{username.NotBlank}")
     private String username;
 
     @Size(min = 3, max = 30)
-    @NotBlank(message = "{password.NotBlank}")
     @Pattern(regexp = "^.{3,30}$", message = "{password.Pattern}")
     private String password;
 }

@@ -20,13 +20,14 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/account")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/{iban}/safe")
     @ResponseStatus(value = CREATED)
-    public String createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
-        return "Your safe id is :  " + accountService.createSafeForAccount(iban, safeDto);
+    public SafeDto createAccountSafe(@PathVariable final String iban, @RequestBody @Valid final SafeDto safeDto) {
+        return accountService.createSafeForAccount(iban, safeDto);
     }
 
     @GetMapping(params = "iban")
@@ -67,19 +68,19 @@ public class AccountController {
 
     @PostMapping("/{iban}/transaction")
     @ResponseStatus(value = CREATED)
-    public TransactionDto sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
+    public List<TransactionDto> sendMoney(@PathVariable final String iban, @RequestBody @Valid final TransactionDto transactionDto) {
         return accountService.sendMoney(iban, transactionDto);
     }
 
     @PostMapping("/take-loan")
     @ResponseStatus(value = CREATED)
-    public TransactionDto takeLoan(@RequestBody final LoanDto loanDto) {
+    public List<TransactionDto> takeLoan(@RequestBody final LoanDto loanDto) {
         return accountService.takeLoan(loanDto);
     }
 
     @PostMapping("/return-loan")
     @ResponseStatus(value = CREATED)
-    public TransactionDto returnLoan(@RequestBody final LoanDto loanDto) {
+    public List<TransactionDto> returnLoan(@RequestBody final LoanDto loanDto) {
         return accountService.returnLoan(loanDto);
     }
 

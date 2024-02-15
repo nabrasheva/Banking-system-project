@@ -5,6 +5,7 @@ import com.banking.project.service.BankUserService;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +16,14 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class BankUserController {
     private final BankUserService bankUserService;
 
     @PostMapping("/registration")
     @ResponseStatus(value = CREATED)
-    public String createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
+    public void createUser(@Valid @RequestBody final BankUserDto bankUserDto) throws MailjetSocketTimeoutException, MailjetException {
         bankUserService.registration(bankUserDto);
-        return "User created successfully";
     }
 
     @PostMapping("/login")
@@ -60,5 +61,11 @@ public class BankUserController {
     @ResponseStatus(value = CREATED)
     public void createAdmin(@RequestBody @Valid final BankUserDto bankUserDto) {
         bankUserService.createAdmin(bankUserDto);
+    }
+
+    @PatchMapping(value = "/recover")
+    @ResponseStatus(value = NO_CONTENT)
+    public void recoverPassword(@RequestParam String email ) throws MailjetSocketTimeoutException, MailjetException {
+        bankUserService.recoverPassword(email);
     }
 }

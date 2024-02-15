@@ -16,15 +16,15 @@ public interface AccountService {
 
     Long saveAccount(Account account);
 
-    Long createSafeForAccount(String iban, SafeDto safeDto);
+    SafeDto createSafeForAccount(String iban, SafeDto safeDto);
 
     void deleteSafeByNameAndIban(String name, String iban);
 
-    TransactionDto sendMoney(String senderIban, TransactionDto transactionDto);
+    List<TransactionDto> sendMoney(String senderIban, TransactionDto transactionDto);
 
-    TransactionDto takeLoan(LoanDto loanDto);
+    List<TransactionDto> takeLoan(LoanDto loanDto);
 
-    TransactionDto returnLoan(LoanDto loanDto);
+    List<TransactionDto> returnLoan(LoanDto loanDto);
 
     AccountDto getAccountByIban(String iban);
 

@@ -17,6 +17,7 @@ import com.banking.project.service.EmailSenderService;
 import com.banking.project.utils.CVVGenerator;
 import com.banking.project.utils.DebitCardNumberGenerator;
 import com.banking.project.utils.IbanGenerator;
+import com.banking.project.utils.PasswordGenerator;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +74,7 @@ public class BankUserServiceImpl implements BankUserService {
                 .build();
 
         bankUserRepository.save(user);
-        emailSenderService.sendRegistrationConfirmationEmail(user);
+        emailSenderService.sendRegistrationConfirmationEmail(user, iban, number);
 
 
     }
@@ -94,14 +95,20 @@ public class BankUserServiceImpl implements BankUserService {
     public void updateUsernameAndPassword(final String email, final UpdateBankUserDto bankUser) {
         final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        user.setUsername(bankUser.getUsername());
-        user.setPassword(passwordEncoder.encode(bankUser.getPassword()));
+
+        if (!bankUser.getUsername().isBlank()) {
+            user.setUsername(bankUser.getUsername());
+        }
+        if (!bankUser.getPassword().isBlank()) {
+            user.setPassword(bankUser.getPassword());
+        }
 
         bankUserRepository.save(user);
     }
 
     @Override
     public LoginResponse login(final LoginRequest loginRequest) {
+
         try {
             final UserDetails userDetails = (UserDetails) authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -111,10 +118,14 @@ public class BankUserServiceImpl implements BankUserService {
             ).getPrincipal();
 
             final String jwtToken = jwtService.generateToken(userDetails);
+            final BankUser user = bankUserRepository.findBankUserByEmail(loginRequest.getEmail()).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+            boolean isUser;
+            isUser = user.getRole().getType().equals("USER");
 
             return LoginResponse.builder()
                     .email(loginRequest.getEmail())
                     .token(jwtToken)
+                    .user(isUser)
                     .build();
         } catch (final BadCredentialsException e) {
             throw new BadCredentialsException("Bad credentials");
@@ -124,8 +135,8 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public AccountDto getAccountByEmail(final String email) {
-        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(()-> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return modelMapper.map(user.getAccount(),AccountDto.class);
+        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return modelMapper.map(user.getAccount(), AccountDto.class);
     }
 
     @Override
@@ -143,6 +154,16 @@ public class BankUserServiceImpl implements BankUserService {
                 .build();
 
         bankUserRepository.save(user);
+    }
+
+    @Override
+    public void recoverPassword(String email) throws MailjetSocketTimeoutException, MailjetException {
+        final BankUser user = bankUserRepository.findBankUserByEmail(email).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+        String password = PasswordGenerator.generateRandomPassword();
+
+        user.setPassword(passwordEncoder.encode(password));
+        bankUserRepository.save(user);
+        emailSenderService.sendPasswordConfirmationEmail(user,password);
     }
 
 

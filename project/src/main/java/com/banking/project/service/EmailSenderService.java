@@ -5,5 +5,7 @@ import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 
 public interface EmailSenderService {
-    void sendRegistrationConfirmationEmail(BankUser user) throws MailjetSocketTimeoutException,MailjetException;
+    void sendRegistrationConfirmationEmail(BankUser user, String iban, String number) throws MailjetSocketTimeoutException,MailjetException;
+
+    void sendPasswordConfirmationEmail(BankUser user, String password) throws MailjetSocketTimeoutException,MailjetException;
 }

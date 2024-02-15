@@ -1,0 +1,33 @@
+<mat-card-header><h1>Online Banking System</h1></mat-card-header>
+<div id="login-form" class="login-main">
+  <mat-card>
+    <mat-card-header><h2>Login form</h2></mat-card-header>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <div>
+        <mat-form-field>
+          <mat-label>Email:</mat-label>
+          <input matInput name="email" type="email" required formControlName="email">
+          <mat-error *ngIf="this.loginForm.get('email')?.hasError('email')">Email must be valid</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Password:</mat-label>
+          <input matInput name="password" type="password" required formControlName="password">
+<!--          <mat-error *ngIf="this.loginForm.get('password')?.hasError('pattern')">Password must be valid</mat-error>-->
+        </mat-form-field>
+      </div>
+      <div>
+        <button type="submit" mat-raised-button color="primary" [disabled]="!loginForm.valid">Login</button>
+      </div>
+      <br>
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </form>
+    <br>
+    <p>Don't have an account? <a [routerLink]="['../signup']">Sign up</a></p>
+    <p>You are an administrator? <a [routerLink]="['../loginAdmin']">Go to Admin login</a></p>
+    <p>Forget password? <a (click)="recoverPassword()" >Recover your password</a></p>
+  </mat-card>
+</div>
+
+<div *ngIf="isInfoMessage" class="info-message">
+  {{ infoMessage }}
+</div>

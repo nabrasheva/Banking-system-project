@@ -1,15 +1,24 @@
+<p>
+  <mat-toolbar id="header">
+    <span id="header_toolbar">Online Banking System</span>
+    <span class="spacer"></span>
+    <button mat-fab extended=""  class="header-btn" ><a [routerLink]="['/welcomePage']">Back</a></button>
+    <button  mat-fab extended=""  class="header-btn" (click)="logOut()" >Logout</button>
+  </mat-toolbar>
+</p>
+
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
 <caption>Safes</caption>
-  <!-- Position Column -->
+
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Name </th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 
-  <!-- Name Column -->
   <ng-container matColumnDef="button">
-    <th mat-header-cell *matHeaderCellDef></th>
+    <th mat-header-cell *matHeaderCellDef>Button</th>
     <td mat-cell *matCellDef="let element" > <button mat-raised-button color="primary" (click)="viewSafe(element)">View Safe</button> </td>
   </ng-container>
 
@@ -17,3 +26,5 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<button mat-raised-button color="primary" (click)="createSafe()">Create New Safe</button>

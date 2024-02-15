@@ -1,0 +1,27 @@
+<div id="create-form" [formGroup]="safeForm">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput id="name-input" formControlName="name">
+    <mat-error *ngIf="this.safeForm.get('name')?.hasError('required')">Name is required</mat-error>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Key</mat-label>
+    <textarea matInput id="key" formControlName="key"></textarea>
+    <mat-error *ngIf="this.safeForm.get('key')?.hasError('required')">Key is required</mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Initial funds</mat-label>
+    <input matInput id="initialFunds" formControlName="initialFunds">
+    <mat-error *ngIf="this.safeForm.get('initialFunds')?.hasError('required')">Initial funds is required</mat-error>
+
+  </mat-form-field>
+
+  <button type="submit" mat-stroked-button color="primary" (click)="addSafe()" >Add Safe</button>
+
+  <app-error-page *ngIf="error" [errorMessage]="errorMessage" (closeModal)="closeModal()"></app-error-page>
+
+</div>

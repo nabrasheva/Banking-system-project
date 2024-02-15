@@ -43,7 +43,7 @@ public class ExceptionMessages {
 
     public static final String CAUGHT_EXCEPTION = "An exception has been caught!";
 
-    private ExceptionMessages() throws IllegalAccessException {
-        throw new IllegalAccessException(NON_INSTANTIABLE_CLASS_MESSAGE);
+    private ExceptionMessages() {
+        throw new IllegalStateException(NON_INSTANTIABLE_CLASS_MESSAGE);
     }
 }
